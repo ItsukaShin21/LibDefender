@@ -9,6 +9,7 @@
     d:DesignHeight="1004.4"
     d:DesignWidth="1536"
     Background="#FF1B2431"
+    Loaded="DashboardPage_Loaded"
     mc:Ignorable="d">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -59,6 +60,7 @@
                     FontWeight="SemiBold"
                     Foreground="White" />
                 <Label
+                    x:Name="RegisteredStudents"
                     Margin="37,0,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
@@ -92,6 +94,7 @@
                     FontWeight="SemiBold"
                     Foreground="White" />
                 <Label
+                    x:Name="RegisteredBooks"
                     Margin="37,0,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
@@ -158,6 +161,7 @@
                     FontWeight="SemiBold"
                     Foreground="White" />
                 <Label
+                    x:Name="PendingReturns"
                     Margin="37,0,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"

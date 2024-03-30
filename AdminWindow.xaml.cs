@@ -20,6 +20,7 @@ namespace LibDefender
         public AdminWindow()
         {
             InitializeComponent();
+            DashboardButton_Click(this, new RoutedEventArgs());
         }
 
         private void DashboardButton_Click(object sender, RoutedEventArgs e)
@@ -42,11 +43,15 @@ namespace LibDefender
             PageFrame.Navigate(new BookListPage());
         }
 
-        private void BurrowListButton_Click(object sender, RoutedEventArgs e)
+        private void BorrowListButton_Click(object sender, RoutedEventArgs e)
         {
             PageFrame.Navigate(new BorrowBookPage());
         }
 
+        private void UserListButton_Click(object sender, RoutedEventArgs e)
+        {
+            PageFrame.Navigate(new UserListPage());
+        }
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
             this.Hide();
