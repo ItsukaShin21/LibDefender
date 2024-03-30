@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -10,6 +11,9 @@ namespace LibDefender
     {
         readonly string connectionString = DatabaseConfig.systemDatabase;
         private readonly DispatcherTimer errorMessageTimer = new();
+        private bool isRfidErrorShown = false;
+        private bool isPasswordErrorShown = false;
+        private bool isFieldErrorShown = false;
 
         private static LoginWindow? newInstance;
         public static LoginWindow Instance
@@ -24,25 +28,45 @@ namespace LibDefender
         public LoginWindow()
         {
             InitializeComponent();
+            errorMessageTimer.Interval = TimeSpan.FromSeconds(2);
+            errorMessageTimer.Tick += ErrorMessageTimer_Tick;
         }
-        private static void SetPlaceholder(string placeholder, TextBox textBox)
+        private static void SetPlaceholder(string placeholder, TextBox textbox)
         {
-            textBox.Text = placeholder;
-            textBox.Foreground = Brushes.Gray;
-            textBox.Tag = placeholder;
+            textbox.Text = placeholder;
+            textbox.Foreground = Brushes.Gray;
+            textbox.Tag = placeholder;
         }
-        private static void UnsetPlaceholder(string placeholder, TextBox textBox)
+        private static void UnsetPlaceholder(string placeholder, TextBox textbox)
         {
-            textBox.Text = placeholder;
-            textBox.Foreground = Brushes.Black;
-            textBox.Tag = placeholder;
+            textbox.Text = placeholder;
+            textbox.Foreground = Brushes.Black;
+            textbox.Tag = placeholder;
         }
         private void ErrorMessageTimer_Tick(object? sender, EventArgs e)
         {
-            ErrorMessage.Visibility = Visibility.Hidden;
-            errorMessageTimer.Stop();
+            if (isRfidErrorShown)
+            {
+                Rfidtxtbox_ErrorMessage.Visibility = Visibility.Hidden;
+                isRfidErrorShown = false;
+            }
+            if (isPasswordErrorShown)
+            {
+                Passwordtxtbox_ErrrorMessage.Visibility = Visibility.Hidden;
+                isPasswordErrorShown = false;
+            }
+            if (isFieldErrorShown)
+            {
+                ErrorMessage.Visibility = Visibility.Hidden;
+                isFieldErrorShown = false;
+            }
+            // Stop the timer if no more errors are shown
+            if (!isRfidErrorShown && !isPasswordErrorShown && isFieldErrorShown)
+            {
+                errorMessageTimer.Stop();
+                ErrorMessage.Visibility = Visibility.Hidden;
+            }
         }
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             SetPlaceholder("Enter your RFID UID", rfiduidTxtBox);
@@ -96,34 +120,71 @@ namespace LibDefender
             if (result > 0)
             {
                 MessageBox.Show("Login Successfully");
-                this.Hide();
                 AdminWindow.Instance.Show();
+                this.Hide();
             }
             else
             {
                 ErrorMessage.Visibility = Visibility.Visible;
+                isFieldErrorShown = true;
                 rfiduidTxtBox.Text = "";
                 passwordTxtBox.Text = "";
                 rfiduidTxtBox.Focus();
-                errorMessageTimer.Start();
             }
         }
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            string query = "SELECT COUNT(*) FROM users WHERE " +
-                           "userRfid = @rfiduid AND password = @password";
+            string rfiduid = rfiduidTxtBox.Text;
+            string password = passwordTxtBox.Text;
 
-            errorMessageTimer.Interval = TimeSpan.FromSeconds(2);
-            errorMessageTimer.Tick += ErrorMessageTimer_Tick;
-
-            LoginQuery(query, rfiduidTxtBox.Text, passwordTxtBox.Text);
+            if (rfiduid == "Enter your RFID UID" || rfiduid == "" || password == "Enter your Password" || password == "")
+            {
+                if (rfiduid == "Enter your RFID UID" || rfiduid == "")
+                {
+                    Rfidtxtbox_ErrorMessage.Visibility = Visibility.Visible;
+                    isRfidErrorShown = true;
+                }
+                if (password == "Enter your Password" || password == "")
+                {
+                    Passwordtxtbox_ErrrorMessage.Visibility = Visibility.Visible;
+                    isPasswordErrorShown = true;
+                }
+                // Set the timer interval and start it only if it's not already running
+                if (!errorMessageTimer.IsEnabled)
+                {
+                    errorMessageTimer.Interval = TimeSpan.FromSeconds(2); // Changed to 2 seconds
+                    errorMessageTimer.Start();
+                }
+            }
+            else
+            {
+                string query = "SELECT COUNT(*) FROM users WHERE userRfid = @rfiduid AND password = @password";
+                LoginQuery(query, rfiduid, password);
+            }
         }
-
-        private void RfiduidTxtBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void RfiduidTxtBox_TextChanged(object sender, RoutedEventArgs e)
         {
-            if(rfiduidTxtBox.Text.Length == 10)
+            if (rfiduidTxtBox.Text.Length == 10)
             {
                 passwordTxtBox.Focus();
+            }
+        }
+        private void Rfidtxtbox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            Regex rfidInput = new("[0-9]+");
+
+            if (!rfidInput.IsMatch(e.Text))
+            {
+                e.Handled = true;
+            }
+        }
+        private void Passwordtxtbox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            Regex passwordInput = new("[A-Za-z0-9!@#]+");
+
+            if (!passwordInput.IsMatch(e.Text))
+            {
+                e.Handled = true;
             }
         }
     }

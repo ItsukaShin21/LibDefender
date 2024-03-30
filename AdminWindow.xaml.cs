@@ -9,7 +9,11 @@ namespace LibDefender
         {
             get
             {
-                newInstance ??= new AdminWindow();
+                if (newInstance == null)
+                {
+                    newInstance = new AdminWindow();
+                    newInstance.Closed += (s, e) => newInstance = null;
+                }
                 return newInstance;
             }
         }
@@ -45,7 +49,7 @@ namespace LibDefender
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            this.Hide();
             LoginWindow.Instance.Show();
         }
     }

@@ -59,8 +59,9 @@
             FontSize="18"
             GotFocus="RfiduidTxtBox_GotFocus"
             LostFocus="RfiduidTxtBox_LostFocus"
-            TextChanged="RfiduidTxtBox_TextChanged"
-            TextWrapping="Wrap" />
+            MaxLength="10"
+            PreviewTextInput="Rfidtxtbox_PreviewTextInput"
+            TextChanged="RfiduidTxtBox_TextChanged" />
         <TextBox
             x:Name="passwordTxtBox"
             Width="402"
@@ -75,7 +76,8 @@
             FontSize="18"
             GotFocus="PasswordTxtBox_GotFocus"
             LostFocus="PasswordTxtBox_LostFocus"
-            TextWrapping="Wrap" />
+            MaxLength="16"
+            PreviewTextInput="Passwordtxtbox_PreviewTextInput" />
         <Button
             x:Name="loginButton"
             Width="402"
@@ -113,11 +115,11 @@
             Visibility="Collapsed" />
         <Label
             x:Name="ErrorMessage"
-            Width="208"
-            Margin="136,358,0,0"
+            Width="114"
+            Margin="184,358,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
-            Content="RFID and Password does not match!!"
+            Content="Account is Invalid!!"
             FontFamily="Roboto"
             Foreground="Red"
             RenderTransformOrigin="0.5,0.5"
@@ -150,5 +152,44 @@
                 </TransformGroup>
             </Rectangle.RenderTransform>
         </Rectangle>
+        <Label
+            x:Name="Rfidtxtbox_ErrorMessage"
+            Width="106"
+            Margin="190,269,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Content="RFID is required!!"
+            FontFamily="Roboto"
+            Foreground="Red"
+            RenderTransformOrigin="0.5,0.5"
+            Visibility="Hidden">
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="1" />
+                    <SkewTransform />
+                    <RotateTransform />
+                    <TranslateTransform />
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <Label
+            x:Name="Passwordtxtbox_ErrrorMessage"
+            Margin="176,358,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Content="Password is required!!"
+            FontFamily="Roboto"
+            Foreground="Red"
+            RenderTransformOrigin="0.5,0.5"
+            Visibility="Hidden">
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="1" />
+                    <SkewTransform />
+                    <RotateTransform />
+                    <TranslateTransform />
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
     </Grid>
 </Window>
