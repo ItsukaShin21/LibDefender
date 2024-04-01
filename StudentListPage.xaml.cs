@@ -1,39 +1,72 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using MySql.Data.MySqlClient;
 
 namespace LibDefender
 {
     public partial class StudentListPage : Page
     {
+        readonly string connectionString = DatabaseConfig.systemDatabase;
         public StudentListPage()
         {
             InitializeComponent();
-            PopulateDataGrid();
             this.DataContext = this;
         }
 
-        private void PopulateDataGrid()
+        private void StudentsListQuery(string studentListQuery)
         {
-            var dummyData = new ObservableCollection<DummyItem>(new[]
-            {
-                new DummyItem { StudentRfid = 121, StudentID = 1, StudentName = "John Doe", Course = "Computer Science", Email = "example@gmail.com", ContactNumber = "09123456789" },
-                new DummyItem { StudentRfid = 131, StudentID = 2, StudentName = "Alice Smith", Course = "Mathematics", Email = "example@gmail.com", ContactNumber = "09123456789" },
-                new DummyItem { StudentRfid = 141, StudentID = 3, StudentName = "Bob Johnson", Course = "Physics", Email = "example@gmail.com", ContactNumber = "09123456789" }
-            });
+            using var connection = new MySqlConnection(connectionString);
+            using var command = new MySqlCommand(studentListQuery, connection);
 
-            // Set the ItemsSource of the DataGrid to the collection
-            DataGrid.ItemsSource = dummyData;
+            connection.Open();
+
+            DataTable newData = new();
+
+            using MySqlDataAdapter dataAdapter = new(command);
+            dataAdapter.Fill(newData);
+
+            StudentsList.ItemsSource = newData.DefaultView;
         }
-    }
 
-    public class DummyItem
-    {
-        public int? StudentRfid { get; set; }
-        public int? StudentID { get; set; }
-        public string? StudentName { get; set; }
-        public string? Course { get; set; }
-        public string? Email { get; set; }
-        public string? ContactNumber { get; set; }
+        private void StudentDeleteQuery(string studentDelete)
+        {
+            using var connection = new MySqlConnection(connectionString);
+            using var command = new MySqlCommand(studentDelete, connection);
+
+            connection.Open();
+            command.ExecuteNonQuery();
+        }
+
+        private void StudentListPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            string studentListQuery = "SELECT * FROM students";
+            StudentsListQuery(studentListQuery);
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Get the data object (the row) associated with the delete button clicked
+            if (sender is Button button && button.DataContext is DataRowView dataContext)
+            {
+                // Extract the studentID from the data object
+                var studentID = dataContext["studentID"].ToString();
+
+                // Construct the delete query
+                string studentDelete = $"DELETE FROM students WHERE studentID = '{studentID}'";
+
+                // Execute the delete query
+                StudentDeleteQuery(studentDelete);
+
+                // Refresh the DataGrid after deletion
+                string studentListQuery = "SELECT * FROM students";
+                StudentsListQuery(studentListQuery);
+            }
+            else
+            {
+                MessageBox.Show("Error: Unable to retrieve data for deletion.");
+            }
+
+        }
     }
 }

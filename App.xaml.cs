@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace LibDefender2
+namespace LibDefender
 {
     /// <summary>
     /// Interaction logic for App.xaml

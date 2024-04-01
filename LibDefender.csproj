@@ -40,4 +40,28 @@
     </Resource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Page Update="AdminWindow.xaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Update="BookListPage.xaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Update="BorrowBookPage.xaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Update="DashboardPage.xaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Update="LoginWindow.xaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Update="StudentListPage.xaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Update="StudentLogPage.xaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+  </ItemGroup>
+
 </Project>
