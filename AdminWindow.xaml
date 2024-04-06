@@ -58,6 +58,7 @@
                 BorderBrush="{x:Null}"
                 Click="DashboardButton_Click"
                 Content="Dashboard"
+                FontFamily="Roboto"
                 FontSize="20"
                 FontWeight="SemiBold"
                 Foreground="White" />
@@ -73,6 +74,7 @@
                 BorderBrush="{x:Null}"
                 Click="StudentListButton_Click"
                 Content="Manage Students"
+                FontFamily="Roboto"
                 FontSize="20"
                 FontWeight="SemiBold"
                 Foreground="White" />
@@ -88,6 +90,7 @@
                 BorderBrush="{x:Null}"
                 Click="StudentLogsButton_Click"
                 Content="Student Logs"
+                FontFamily="Roboto"
                 FontSize="20"
                 FontWeight="SemiBold"
                 Foreground="White" />
@@ -103,6 +106,7 @@
                 BorderBrush="{x:Null}"
                 Click="BookListButton_Click"
                 Content="Manage Books"
+                FontFamily="Roboto"
                 FontSize="20"
                 FontWeight="SemiBold"
                 Foreground="White" />
@@ -118,6 +122,7 @@
                 BorderBrush="{x:Null}"
                 Click="BorrowListButton_Click"
                 Content="Borrowed Books"
+                FontFamily="Roboto"
                 FontSize="20"
                 FontWeight="SemiBold"
                 Foreground="White" />
@@ -133,6 +138,7 @@
                 BorderBrush="{x:Null}"
                 Click="UserListButton_Click"
                 Content="User List"
+                FontFamily="Roboto"
                 FontSize="20"
                 FontWeight="SemiBold"
                 Foreground="White" />
@@ -156,6 +162,7 @@
                 Background="{x:Null}"
                 BorderBrush="{x:Null}"
                 Content="Settings"
+                FontFamily="Roboto"
                 FontSize="20"
                 FontWeight="SemiBold"
                 Foreground="White" />
@@ -171,6 +178,7 @@
                 BorderBrush="{x:Null}"
                 Click="LogoutButton_Click"
                 Content="Logout"
+                FontFamily="Roboto"
                 FontSize="20"
                 FontWeight="SemiBold"
                 Foreground="White" />
@@ -185,6 +193,7 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 Content="Victor Lopez"
+                FontFamily="Roboto"
                 FontSize="14"
                 FontWeight="Bold"
                 Foreground="White" />
@@ -193,6 +202,7 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 Content="Admin"
+                FontFamily="Roboto"
                 FontSize="12"
                 Foreground="White" />
         </Grid>
@@ -206,6 +216,11 @@
                 <Frame x:Name="PageFrame" NavigationUIVisibility="Hidden" />
             </Grid>
         </Grid>
+        <Rectangle
+            x:Name="Blur"
+            Grid.RowSpan="4"
+            Grid.ColumnSpan="2"
+            Fill="#55393838"
+            Visibility="Hidden" />
     </Grid>
-
 </Window>

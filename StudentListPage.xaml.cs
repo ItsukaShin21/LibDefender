@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using MySql.Data.MySqlClient;
 
 namespace LibDefender
@@ -12,6 +13,11 @@ namespace LibDefender
         {
             InitializeComponent();
             this.DataContext = this;
+        }
+
+        private void DataGridCell_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true;
         }
 
         private void StudentsListQuery(string studentListQuery)
@@ -53,7 +59,7 @@ namespace LibDefender
                 var studentID = dataContext["studentID"].ToString();
 
                 // Construct the delete query
-                string studentDelete = $"DELETE FROM students WHERE studentID = '{studentID}'";
+                string studentDelete = "DELETE FROM students WHERE studentID = '{studentID}'";
 
                 // Execute the delete query
                 StudentDeleteQuery(studentDelete);
@@ -67,6 +73,17 @@ namespace LibDefender
                 MessageBox.Show("Error: Unable to retrieve data for deletion.");
             }
 
+        }
+
+        private void RegisterModalButton_Click(object sender, RoutedEventArgs e)
+        {
+            var adminWindow = Application.Current.Windows.OfType<AdminWindow>().FirstOrDefault();
+
+            if (adminWindow != null)
+            {
+                adminWindow.Blur.Visibility = Visibility.Visible;
+            }
+            StudentRegisterModal.Instance.ShowDialog();
         }
     }
 }

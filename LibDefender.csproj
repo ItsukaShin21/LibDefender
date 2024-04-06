@@ -6,12 +6,14 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Resources\AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Resources\AppIcon.ico" />
     <None Remove="Resources\AppLogo.png" />
     <None Remove="Resources\DataIcon.png" />
+    <None Remove="Resources\deleteIcon.png" />
     <None Remove="Resources\passwordIcon.png" />
     <None Remove="Resources\userIcon.png" />
   </ItemGroup>
@@ -32,12 +34,21 @@
     <Resource Include="Resources\DataIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\deleteIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\passwordIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\userIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="StudentRegisterModal.xaml.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -60,6 +71,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Update="StudentLogPage.xaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Update="StudentRegisterModal.xaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
   </ItemGroup>
