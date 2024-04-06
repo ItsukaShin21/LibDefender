@@ -88,11 +88,16 @@
                 ColumnHeaderHeight="40"
                 Foreground="Black"
                 HorizontalGridLinesBrush="White"
+                HorizontalScrollBarVisibility="Disabled"
+                IsReadOnly="True"
                 RowBackground="#2D86B3FF"
                 RowHeaderWidth="0"
                 RowHeight="50"
+                ScrollViewer.CanContentScroll="True"
                 SelectionUnit="Cell"
-                VerticalGridLinesBrush="{x:Null}">
+                UseLayoutRounding="True"
+                VerticalGridLinesBrush="{x:Null}"
+                VerticalScrollBarVisibility="Visible">
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -191,14 +196,15 @@
                                         Background="#FFFE5C73"
                                         CornerRadius="3,3,3,3">
                                         <Button
+                                            x:Name="DeleteButton"
                                             Width="60"
                                             Height="30"
                                             Background="{x:Null}"
                                             BorderBrush="{x:Null}"
-                                            Click="DeleteButton_Click"
                                             CommandParameter="{Binding}"
                                             Content="Delete"
-                                            Foreground="#FFF" />
+                                            Foreground="#FFF"
+                                            PreviewMouseLeftButtonDown="DeleteButton_PreviewMouseLeftButtonDown" />
                                     </Border>
                                 </StackPanel>
                             </DataTemplate>

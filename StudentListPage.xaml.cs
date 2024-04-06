@@ -9,6 +9,7 @@ namespace LibDefender
     public partial class StudentListPage : Page
     {
         readonly string connectionString = DatabaseConfig.systemDatabase;
+
         public StudentListPage()
         {
             InitializeComponent();
@@ -17,7 +18,7 @@ namespace LibDefender
 
         private void DataGridCell_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            e.Handled = true;
+            e.Handled = false;
         }
 
         private void StudentsListQuery(string studentListQuery)
@@ -35,44 +36,54 @@ namespace LibDefender
             StudentsList.ItemsSource = newData.DefaultView;
         }
 
-        private void StudentDeleteQuery(string studentDelete)
+        private void StudentDeleteQuery(string studentID)
         {
-            using var connection = new MySqlConnection(connectionString);
-            using var command = new MySqlCommand(studentDelete, connection);
+            try
+            {
+                using var connection = new MySqlConnection(connectionString);
+                using var command = new MySqlCommand("DELETE FROM students WHERE studentID = @studentID", connection);
+                command.Parameters.AddWithValue("@studentID", studentID);
 
-            connection.Open();
-            command.ExecuteNonQuery();
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                // Handle or log the exception as appropriate
+                MessageBox.Show($"Error deleting student: {ex.Message}");
+            }
         }
 
-        private void StudentListPage_Loaded(object sender, RoutedEventArgs e)
+        public void RefreshStudentsList()
         {
             string studentListQuery = "SELECT * FROM students";
             StudentsListQuery(studentListQuery);
         }
 
-        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        public void StudentListPage_Loaded(object sender, RoutedEventArgs e)
         {
-            // Get the data object (the row) associated with the delete button clicked
+            RefreshStudentsList();
+        }
+
+        private void DeleteButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
             if (sender is Button button && button.DataContext is DataRowView dataContext)
             {
-                // Extract the studentID from the data object
                 var studentID = dataContext["studentID"].ToString();
+                var studentName = dataContext["studentName"].ToString(); // Assuming you want to display the student's name in the confirmation dialog
 
-                // Construct the delete query
-                string studentDelete = "DELETE FROM students WHERE studentID = '{studentID}'";
-
-                // Execute the delete query
-                StudentDeleteQuery(studentDelete);
-
-                // Refresh the DataGrid after deletion
-                string studentListQuery = "SELECT * FROM students";
-                StudentsListQuery(studentListQuery);
+                // Ask for user confirmation
+                var result = MessageBox.Show($"Are you sure you want to delete {studentName}?", "Confirm Deletion", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    StudentDeleteQuery(studentID!);
+                    RefreshStudentsList();
+                }
             }
             else
             {
                 MessageBox.Show("Error: Unable to retrieve data for deletion.");
             }
-
         }
 
         private void RegisterModalButton_Click(object sender, RoutedEventArgs e)
