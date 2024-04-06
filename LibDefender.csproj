@@ -6,12 +6,14 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Resources\AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Resources\AppIcon.ico" />
     <None Remove="Resources\AppLogo.png" />
     <None Remove="Resources\DataIcon.png" />
+    <None Remove="Resources\deleteIcon.png" />
     <None Remove="Resources\passwordIcon.png" />
     <None Remove="Resources\userIcon.png" />
   </ItemGroup>
@@ -30,6 +32,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\DataIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\deleteIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\passwordIcon.png">

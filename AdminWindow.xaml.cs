@@ -5,6 +5,7 @@ namespace LibDefender
     public partial class AdminWindow : Window
     {
         private static AdminWindow? newInstance;
+        
         public static AdminWindow Instance
         {
             get

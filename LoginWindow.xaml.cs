@@ -171,7 +171,7 @@ namespace LibDefender
         }
         private void Rfidtxtbox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            Regex rfidInput = new("[0-9]+");
+            Regex rfidInput = rfidRegexInput();
 
             if (!rfidInput.IsMatch(e.Text))
             {
@@ -180,12 +180,17 @@ namespace LibDefender
         }
         private void Passwordtxtbox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            Regex passwordInput = new("[A-Za-z0-9!@#]+");
+            Regex passwordInput = passwordRegexInput();
 
             if (!passwordInput.IsMatch(e.Text))
             {
                 e.Handled = true;
             }
         }
+
+        [GeneratedRegex("[0-9]+")]
+        private static partial Regex rfidRegexInput();
+        [GeneratedRegex("[A-Za-z0-9!@#]+")]
+        private static partial Regex passwordRegexInput();
     }
 }

@@ -88,7 +88,7 @@
                 HorizontalGridLinesBrush="White"
                 RowBackground="#2D86B3FF"
                 RowHeaderWidth="0"
-                RowHeight="35"
+                RowHeight="50"
                 SelectionUnit="Cell"
                 VerticalGridLinesBrush="{x:Null}">
                 <DataGrid.ColumnHeaderStyle>
@@ -100,6 +100,7 @@
                 </DataGrid.ColumnHeaderStyle>
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
+                        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridCell_PreviewMouseLeftButtonDown" />
                         <Setter Property="Foreground" Value="#FFF" />
                         <Setter Property="HorizontalAlignment" Value="Center" />
                         <Setter Property="Template">
@@ -166,17 +167,37 @@
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Orientation="Horizontal">
-                                    <Button
+                                    <Border
                                         Width="60"
-                                        Height="20"
+                                        Height="30"
                                         Margin="0,0,20,0"
-                                        Content="View" />
-                                    <Button
+                                        Background="#FF00B69B"
+                                        CornerRadius="3,3,3,3">
+                                        <Button
+                                            Width="60"
+                                            Height="30"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            Background="{x:Null}"
+                                            BorderBrush="{x:Null}"
+                                            Content="View"
+                                            Foreground="#FFF" />
+                                    </Border>
+                                    <Border
                                         Width="60"
-                                        Height="20"
-                                        Click="DeleteButton_Click"
-                                        CommandParameter="{Binding}"
-                                        Content="Delete" />
+                                        Height="30"
+                                        Background="#FFFE5C73"
+                                        CornerRadius="3,3,3,3">
+                                        <Button
+                                            Width="60"
+                                            Height="30"
+                                            Background="{x:Null}"
+                                            BorderBrush="{x:Null}"
+                                            Click="DeleteButton_Click"
+                                            CommandParameter="{Binding}"
+                                            Content="Delete"
+                                            Foreground="#FFF" />
+                                    </Border>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
