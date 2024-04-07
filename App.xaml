@@ -28,9 +28,5 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <Style TargetType="{x:Type Control}">
-            <Setter Property="FontFamily" Value="Roboto" />
-        </Style>
     </Application.Resources>
 </Application>

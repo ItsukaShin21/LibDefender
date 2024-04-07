@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# S2583: Conditionally executed code should be reachable
+dotnet_diagnostic.S2583.severity = none

@@ -11,9 +11,9 @@ namespace LibDefender
     {
         readonly string connectionString = DatabaseConfig.systemDatabase;
         private readonly DispatcherTimer errorMessageTimer = new();
-        private bool isRfidErrorShown = false;
-        private bool isPasswordErrorShown = false;
-        private bool isFieldErrorShown = false;
+        private bool isRfidErrorShown = true;
+        private bool isPasswordErrorShown = true;
+        private bool isFieldErrorShown = true;
 
         private static LoginWindow? newInstance;
         public static LoginWindow Instance
@@ -60,8 +60,7 @@ namespace LibDefender
                 ErrorMessage.Visibility = Visibility.Hidden;
                 isFieldErrorShown = false;
             }
-            // Stop the timer if no more errors are shown
-            if (!isRfidErrorShown && !isPasswordErrorShown && isFieldErrorShown)
+            if (isRfidErrorShown && isPasswordErrorShown && isFieldErrorShown)
             {
                 errorMessageTimer.Stop();
                 ErrorMessage.Visibility = Visibility.Hidden;
@@ -126,6 +125,8 @@ namespace LibDefender
             else
             {
                 ErrorMessage.Visibility = Visibility.Visible;
+                errorMessageTimer.Interval = TimeSpan.FromSeconds(2); // Changed to 2 seconds
+                errorMessageTimer.Start();
                 isFieldErrorShown = true;
                 rfiduidTxtBox.Text = "";
                 passwordTxtBox.Text = "";

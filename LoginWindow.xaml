@@ -13,6 +13,7 @@
     Icon="/Resources/AppIcon.ico"
     Loaded="Window_Loaded"
     WindowState="Maximized"
+    WindowStyle="None"
     mc:Ignorable="d">
     <Grid Width="450" Height="467">
         <Grid Margin="9,10,-9,-10" />
@@ -45,39 +46,52 @@
             FontFamily="Roboto"
             FontSize="18"
             Foreground="White" />
-        <TextBox
-            x:Name="rfiduidTxtBox"
+
+        <Border
             Width="402"
             Height="50"
             Margin="0,214,9,0"
-            Padding="50,12,0,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
-            Background="#FFEDF2F7"
-            BorderBrush="{x:Null}"
-            FontFamily="Roboto"
-            FontSize="18"
-            GotFocus="RfiduidTxtBox_GotFocus"
-            LostFocus="RfiduidTxtBox_LostFocus"
-            MaxLength="10"
-            PreviewTextInput="Rfidtxtbox_PreviewTextInput"
-            TextChanged="RfiduidTxtBox_TextChanged" />
-        <TextBox
-            x:Name="passwordTxtBox"
+            Background="#FFEDF2F7">
+            <TextBox
+                x:Name="rfiduidTxtBox"
+                Width="402"
+                Height="50"
+                Padding="50,12,0,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Background="#FFEDF2F7"
+                FontFamily="Roboto"
+                FontSize="18"
+                GotFocus="RfiduidTxtBox_GotFocus"
+                LostFocus="RfiduidTxtBox_LostFocus"
+                MaxLength="10"
+                PreviewTextInput="Rfidtxtbox_PreviewTextInput"
+                TextChanged="RfiduidTxtBox_TextChanged" />
+        </Border>
+
+        <Border
             Width="402"
             Height="50"
             Margin="39,303,0,0"
-            Padding="50,12,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
-            Background="#FFEDF2F7"
-            BorderBrush="{x:Null}"
-            FontFamily="Roboto"
-            FontSize="18"
-            GotFocus="PasswordTxtBox_GotFocus"
-            LostFocus="PasswordTxtBox_LostFocus"
-            MaxLength="16"
-            PreviewTextInput="Passwordtxtbox_PreviewTextInput" />
+            Background="#FFEDF2F7">
+            <TextBox
+                x:Name="passwordTxtBox"
+                Padding="50,12,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                BorderBrush="{x:Null}"
+                FontFamily="Roboto"
+                FontSize="18"
+                GotFocus="PasswordTxtBox_GotFocus"
+                LostFocus="PasswordTxtBox_LostFocus"
+                MaxLength="16"
+                PreviewTextInput="Passwordtxtbox_PreviewTextInput" />
+        </Border>
+
         <Button
             x:Name="loginButton"
             Width="402"

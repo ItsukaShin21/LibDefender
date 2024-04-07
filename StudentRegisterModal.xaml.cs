@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using System.Data;
 using System.Numerics;
 using System.Windows;
 
@@ -24,9 +25,8 @@ namespace LibDefender
         public StudentRegisterModal()
         {
             InitializeComponent();
-
-
             this.Owner = Application.Current.MainWindow as AdminWindow;
+            Courses();
         }
 
         private void RegisterStudentQuery(string query, BigInteger rfidUID, string studentID, string studentName, string course, string email, string contactNumber)
@@ -66,6 +66,26 @@ namespace LibDefender
             }
         }
 
+        private void FetchCoursesQuery(string fetchCourseQuery)
+        {
+            using var connection = new MySqlConnection(connectionString);
+            using var command = new MySqlCommand(fetchCourseQuery, connection);
+
+            connection.Open();
+
+            DataTable courses = new();
+
+            using MySqlDataAdapter dataAdapter = new(command);
+            dataAdapter.Fill(courses);
+
+            connection.Close();
+
+            courseComboBox.ItemsSource = courses.DefaultView;
+
+            courseComboBox.DisplayMemberPath = "courseName";
+
+        }
+
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
             BigInteger rfidUID = BigInteger.Parse(rfidTxtBox.Text);
@@ -90,6 +110,12 @@ namespace LibDefender
             {
                 adminWindow.Blur.Visibility = Visibility.Hidden;
             }
+        }
+
+        private void Courses()
+        {
+            string fetchCourseQuery = "SELECT courseName FROM courses";
+            FetchCoursesQuery(fetchCourseQuery);
         }
     }
 }
