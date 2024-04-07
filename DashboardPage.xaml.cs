@@ -16,7 +16,7 @@ namespace LibDefender
         {
             string StudentCountQuery = "SELECT COUNT(*) AS RegisteredStudents FROM students";
             string BookCountQuery = "SELECT COUNT(*) AS RegisteredBooks FROM books";
-            string PendingQuery = "SELECT COUNT(*) AS Pendings FROM books WHERE isBorrowed = 1";
+            string PendingQuery = "SELECT COUNT(*) AS Pendings FROM books WHERE status = 'Borrowed'";
             StudentsCountQuery(StudentCountQuery);
             BooksCountQuery(BookCountQuery);
             PendingCountQuery(PendingQuery);

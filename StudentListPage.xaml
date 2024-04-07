@@ -23,6 +23,7 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Content="Registered Students"
+                FontFamily="Roboto"
                 FontSize="36"
                 FontWeight="Bold"
                 Foreground="White" />
@@ -42,6 +43,7 @@
                     VerticalContentAlignment="Center"
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
+                    FontFamily="Roboto"
                     SelectionBrush="#FF3C99EB"
                     TextWrapping="Wrap" />
             </Border>
@@ -63,6 +65,8 @@
                     BorderBrush="{x:Null}"
                     Click="RegisterModalButton_Click"
                     Content="Register Student"
+                    FontFamily="Roboto"
+                    FontWeight="Medium"
                     Foreground="White" />
             </Border>
         </Grid>
@@ -86,6 +90,7 @@
                 CanUserResizeRows="False"
                 CanUserSortColumns="False"
                 ColumnHeaderHeight="40"
+                FontFamily="Roboto"
                 Foreground="Black"
                 HorizontalGridLinesBrush="White"
                 HorizontalScrollBarVisibility="Disabled"
@@ -94,17 +99,19 @@
                 RowHeaderWidth="0"
                 RowHeight="50"
                 ScrollViewer.CanContentScroll="True"
-                SelectionUnit="Cell"
                 UseLayoutRounding="True"
                 VerticalGridLinesBrush="{x:Null}"
                 VerticalScrollBarVisibility="Visible">
+
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="HorizontalContentAlignment" Value="Center" />
                         <Setter Property="Background" Value="#2D86B3FF" />
                         <Setter Property="Foreground" Value="#FFF" />
+                        <Setter Property="FontWeight" Value="Bold" />
                     </Style>
                 </DataGrid.ColumnHeaderStyle>
+
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridCell_PreviewMouseLeftButtonDown" />
@@ -121,6 +128,7 @@
                         </Setter>
                     </Style>
                 </DataGrid.CellStyle>
+
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         Width="*"
@@ -155,7 +163,7 @@
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding contactNumber}"
+                        Binding="{Binding contactNumber, StringFormat=00000000000}"
                         CanUserReorder="False"
                         CanUserResize="False"
                         CanUserSort="False"
@@ -211,6 +219,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
+
             </DataGrid>
         </Grid>
     </Grid>

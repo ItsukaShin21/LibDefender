@@ -70,7 +70,7 @@ namespace LibDefender
             if (sender is Button button && button.DataContext is DataRowView dataContext)
             {
                 var studentID = dataContext["studentID"].ToString();
-                var studentName = dataContext["studentName"].ToString(); // Assuming you want to display the student's name in the confirmation dialog
+                var studentName = dataContext["studentName"].ToString();
 
                 // Ask for user confirmation
                 var result = MessageBox.Show($"Are you sure you want to delete {studentName}?", "Confirm Deletion", MessageBoxButton.YesNo, MessageBoxImage.Warning);

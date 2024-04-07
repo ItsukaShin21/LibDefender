@@ -9,6 +9,7 @@
     d:DesignHeight="1004.4"
     d:DesignWidth="1536"
     Background="#FF1B2431"
+    Loaded="BookListPage_Loaded"
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
@@ -22,6 +23,7 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Content="Books List"
+                FontFamily="Roboto"
                 FontSize="36"
                 FontWeight="Bold"
                 Foreground="White" />
@@ -60,13 +62,15 @@
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
                     Content="Register Book"
+                    FontFamily="Roboto"
+                    FontWeight="Medium"
                     Foreground="White" />
             </Border>
         </Grid>
 
         <Grid Grid.Row="1">
             <DataGrid
-                x:Name="DataGrid"
+                x:Name="BooksList"
                 Width="1128.8"
                 Height="650"
                 HorizontalAlignment="Center"
@@ -83,18 +87,21 @@
                 CanUserResizeRows="False"
                 CanUserSortColumns="False"
                 ColumnHeaderHeight="40"
+                FontFamily="Roboto"
                 Foreground="Black"
                 HorizontalGridLinesBrush="White"
                 RowBackground="#2D86B3FF"
                 RowHeaderWidth="0"
-                RowHeight="35"
+                RowHeight="50"
                 SelectionUnit="Cell"
-                VerticalGridLinesBrush="{x:Null}">
+                VerticalGridLinesBrush="{x:Null}"
+                VerticalScrollBarVisibility="Visible">
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="HorizontalContentAlignment" Value="Center" />
                         <Setter Property="Background" Value="#2D86B3FF" />
                         <Setter Property="Foreground" Value="#FFF" />
+                        <Setter Property="FontWeight" Value="Bold" />
                     </Style>
                 </DataGrid.ColumnHeaderStyle>
                 <DataGrid.CellStyle>
@@ -115,7 +122,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding BookID}"
+                        Binding="{Binding bookRfid}"
                         CanUserReorder="False"
                         CanUserResize="False"
                         CanUserSort="False"
@@ -123,7 +130,7 @@
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding BookName}"
+                        Binding="{Binding bookName}"
                         CanUserReorder="False"
                         CanUserResize="False"
                         CanUserSort="False"
@@ -131,7 +138,15 @@
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding DateAdded}"
+                        Binding="{Binding bookAuthor}"
+                        CanUserReorder="False"
+                        CanUserResize="False"
+                        CanUserSort="False"
+                        Header="Book Author"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding dateAdded, StringFormat='{}{0:MM/dd/yyyy} at {0:h:mm:ss tt}'}"
                         CanUserReorder="False"
                         CanUserResize="False"
                         CanUserSort="False"
@@ -139,7 +154,7 @@
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding Status}"
+                        Binding="{Binding status}"
                         CanUserReorder="False"
                         CanUserResize="False"
                         CanUserSort="False"
@@ -158,15 +173,38 @@
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Orientation="Horizontal">
-                                    <Button
+                                    <Border
                                         Width="60"
-                                        Height="20"
+                                        Height="30"
                                         Margin="0,0,20,0"
-                                        Content="View" />
-                                    <Button
+                                        Background="#FF00B69B"
+                                        CornerRadius="3,3,3,3">
+                                        <Button
+                                            Width="60"
+                                            Height="30"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            Background="{x:Null}"
+                                            BorderBrush="{x:Null}"
+                                            Content="View"
+                                            Foreground="#FFF" />
+                                    </Border>
+                                    <Border
                                         Width="60"
-                                        Height="20"
-                                        Content="Delete" />
+                                        Height="30"
+                                        Background="#FFFE5C73"
+                                        CornerRadius="3,3,3,3">
+                                        <Button
+                                            x:Name="DeleteButton"
+                                            Width="60"
+                                            Height="30"
+                                            Background="{x:Null}"
+                                            BorderBrush="{x:Null}"
+                                            CommandParameter="{Binding}"
+                                            Content="Delete"
+                                            Foreground="#FFF"
+                                            PreviewMouseLeftButtonDown="DeleteButton_PreviewMouseLeftButtonDown" />
+                                    </Border>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
