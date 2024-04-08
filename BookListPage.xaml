@@ -55,12 +55,14 @@
                 Background="#FF4880FF"
                 CornerRadius="10,10,10,10">
                 <Button
+                    x:Name="BookRegisterModalButton"
                     Width="164"
                     Height="42"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
+                    Click="BookRegisterModalButton_Click"
                     Content="Register Book"
                     FontFamily="Roboto"
                     FontWeight="Medium"
@@ -146,7 +148,7 @@
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding dateAdded, StringFormat='{}{0:MM/dd/yyyy} at {0:h:mm:ss tt}'}"
+                        Binding="{Binding dateAdded, StringFormat='{}{0:MMMM d, yyyy} at {0:h:mm tt}'}"
                         CanUserReorder="False"
                         CanUserResize="False"
                         CanUserSort="False"

@@ -79,5 +79,16 @@ namespace LibDefender
         {
             RefreshBooksList();
         }
+
+        private void BookRegisterModalButton_Click(object sender, RoutedEventArgs e)
+        {
+            var adminWindow = Application.Current.Windows.OfType<AdminWindow>().FirstOrDefault();
+
+            if (adminWindow != null)
+            {
+                adminWindow.Blur.Visibility = Visibility.Visible;
+            }
+            BookRegisterModal.Instance.ShowDialog();
+        }
     }
 }
