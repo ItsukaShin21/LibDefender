@@ -9,6 +9,7 @@
     d:DesignHeight="1004.4"
     d:DesignWidth="1536"
     Background="#FF1B2431"
+    Loaded="UserListPage_Loaded"
     mc:Ignorable="d">
 
     <Grid>
@@ -23,6 +24,7 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Content="Registered Users"
+                FontFamily="Roboto"
                 FontSize="36"
                 FontWeight="Bold"
                 Foreground="White" />
@@ -42,6 +44,7 @@
                     VerticalContentAlignment="Center"
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
+                    FontFamily="Roboto"
                     SelectionBrush="#FF3C99EB"
                     TextWrapping="Wrap" />
             </Border>
@@ -54,20 +57,24 @@
                 Background="#FF4880FF"
                 CornerRadius="10,10,10,10">
                 <Button
+                    x:Name="RegisterModalButton"
                     Width="164"
                     Height="42"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
+                    Click="RegisterButton_Click"
                     Content="Register User"
+                    FontFamily="Roboto"
+                    FontWeight="Medium"
                     Foreground="White" />
             </Border>
         </Grid>
 
         <Grid Grid.Row="1">
             <DataGrid
-                x:Name="DataGrid"
+                x:Name="UsersList"
                 Width="1128.8"
                 Height="650"
                 HorizontalAlignment="Center"
@@ -84,17 +91,19 @@
                 CanUserResizeRows="False"
                 CanUserSortColumns="False"
                 ColumnHeaderHeight="40"
+                FontFamily="Roboto"
                 Foreground="Black"
                 HorizontalGridLinesBrush="White"
                 RowBackground="#2D86B3FF"
                 RowHeaderWidth="0"
-                RowHeight="35"
+                RowHeight="50"
                 SelectionUnit="Cell"
                 VerticalGridLinesBrush="{x:Null}">
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="HorizontalContentAlignment" Value="Center" />
                         <Setter Property="Background" Value="#2D86B3FF" />
+                        <Setter Property="FontWeight" Value="Bold" />
                         <Setter Property="Foreground" Value="#FFF" />
                     </Style>
                 </DataGrid.ColumnHeaderStyle>
@@ -116,35 +125,83 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding UserRfid}"
+                        Binding="{Binding userRfid}"
                         CanUserResize="False"
                         Header="User RFID"
                         IsReadOnly="True"
                         Visibility="Visible" />
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding Username}"
+                        Binding="{Binding username}"
                         CanUserResize="False"
                         Header="Username"
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding Email}"
+                        Binding="{Binding email}"
                         CanUserResize="False"
                         Header="Email"
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding Password}"
+                        Binding="{Binding password}"
                         CanUserResize="False"
                         Header="Password"
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding UserType}"
+                        Binding="{Binding userType}"
                         CanUserResize="False"
                         Header="User Type"
                         IsReadOnly="True" />
+                    <DataGridTemplateColumn
+                        Width="*"
+                        CanUserReorder="False"
+                        CanUserResize="False"
+                        CanUserSort="False"
+                        Header="Actions"
+                        IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                                    <Border
+                                        Width="60"
+                                        Height="30"
+                                        Margin="0,0,20,0"
+                                        Background="#FF00B69B"
+                                        CornerRadius="3,3,3,3">
+                                        <Button
+                                            Width="60"
+                                            Height="30"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            Background="{x:Null}"
+                                            BorderBrush="{x:Null}"
+                                            Content="View"
+                                            Foreground="#FFF" />
+                                    </Border>
+                                    <Border
+                                        Width="60"
+                                        Height="30"
+                                        Background="#FFFE5C73"
+                                        CornerRadius="3,3,3,3">
+                                        <Button
+                                            x:Name="DeleteButton"
+                                            Width="60"
+                                            Height="30"
+                                            Background="{x:Null}"
+                                            BorderBrush="{x:Null}"
+                                            CommandParameter="{Binding}"
+                                            Content="Delete"
+                                            Foreground="#FFF" />
+                                    </Border>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
