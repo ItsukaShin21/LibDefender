@@ -48,7 +48,7 @@ namespace LibDefender
             if (result == 0)
             {
                 this.Close();
-                MessageBox.Show("Student has been successfully registered!");
+                MessageBox.Show($"{studentName} has been successfully registered!");
                 connection.Close();
 
                 var adminWindow = Application.Current.Windows.OfType<AdminWindow>().FirstOrDefault();

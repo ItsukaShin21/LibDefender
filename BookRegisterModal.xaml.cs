@@ -57,7 +57,7 @@ namespace LibDefender
             if (result == 0)
             {
                 this.Close();
-                MessageBox.Show("The book has been successfully registered!");
+                MessageBox.Show($"{bookName} has been successfully registered!");
                 connection.Close();
 
                 var adminWindow = Application.Current.Windows.OfType<AdminWindow>().FirstOrDefault();
@@ -69,7 +69,7 @@ namespace LibDefender
             }
             else
             {
-                MessageBox.Show("Registration is failed!");
+                MessageBox.Show("Registration failed!");
 
             }
         }
