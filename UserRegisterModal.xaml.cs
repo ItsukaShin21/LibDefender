@@ -89,5 +89,13 @@ namespace LibDefender
 
             RegisterUserQuery(query, userRfid, username, email, password, userType);
         }
+
+        private void RfidTxtBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (rfidTxtBox.Text.Length == 10)
+            {
+                usernameTxtBox.Focus();
+            }
+        }
     }
 }

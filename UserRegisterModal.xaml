@@ -61,7 +61,9 @@
                     VerticalContentAlignment="Center"
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
-                    FontFamily="Roboto" />
+                    FontFamily="Roboto"
+                    MaxLength="10"
+                    TextChanged="RfidTxtBox_TextChanged" />
             </Border>
         </Grid>
 
@@ -88,7 +90,8 @@
                     VerticalContentAlignment="Center"
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
-                    FontFamily="Roboto" />
+                    FontFamily="Roboto"
+                    MaxLength="16" />
             </Border>
         </Grid>
 
@@ -142,7 +145,8 @@
                     VerticalContentAlignment="Center"
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
-                    FontFamily="Roboto" />
+                    FontFamily="Roboto"
+                    MaxLength="16" />
             </Border>
         </Grid>
 
