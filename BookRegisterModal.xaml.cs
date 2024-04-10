@@ -85,5 +85,13 @@ namespace LibDefender
 
             RegisterBookQuery(query, rfidUID, bookName, authorName);
         }
+
+        private void RfidTxtBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (rfidTxtBox.Text.Length == 10)
+            {
+                bookNameTxtBox.Focus();
+            }
+        }
     }
 }
