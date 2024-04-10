@@ -151,7 +151,7 @@
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding course}"
+                        Binding="{Binding courseName}"
                         CanUserResize="False"
                         Header="Course"
                         IsReadOnly="True" />

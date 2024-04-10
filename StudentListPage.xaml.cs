@@ -56,7 +56,9 @@ namespace LibDefender
 
         public void RefreshStudentsList()
         {
-            string studentListQuery = "SELECT * FROM students";
+            string studentListQuery = "SELECT students.studentRfid, students.studentID, students.studentName, " +
+                                      "courses.courseName, students.email, students.contactNumber FROM students " +
+                                      "INNER JOIN courses ON students.course = courses.courseID;";
             StudentsListQuery(studentListQuery);
         }
 

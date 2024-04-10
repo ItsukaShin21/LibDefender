@@ -60,7 +60,10 @@
                     VerticalContentAlignment="Center"
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
-                    FontFamily="Roboto" />
+                    FontFamily="Roboto"
+                    MaxLength="10"
+                    PreviewTextInput="RfidTxtBox_PreviewTextInput"
+                    TextChanged="Rfid_TextChanged" />
             </Border>
         </Grid>
         <Grid Grid.Row="2">
@@ -86,7 +89,9 @@
                     VerticalContentAlignment="Center"
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
-                    FontFamily="Roboto" />
+                    FontFamily="Roboto"
+                    MaxLength="7"
+                    PreviewTextInput="IdTxtBox_PreviewTextInput" TextChanged="IdTxtBox_TextChanged" />
             </Border>
         </Grid>
         <Grid Grid.Row="3">
@@ -190,7 +195,8 @@
                     VerticalContentAlignment="Center"
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
-                    FontFamily="Roboto" />
+                    FontFamily="Roboto"
+                    MaxLength="11" />
             </Border>
         </Grid>
         <Grid Grid.Row="7">

@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System.Data;
 using System.Numerics;
+using System.Text.RegularExpressions;
 using System.Windows;
 
 namespace LibDefender
@@ -9,6 +10,12 @@ namespace LibDefender
     {
         private static StudentRegisterModal? newInstance;
         readonly string connectionString = DatabaseConfig.systemDatabase;
+
+        [GeneratedRegex("[0-9]+")]
+        private static partial Regex rfidRegexInput();
+        [GeneratedRegex("[0-9]+")]
+        private static partial Regex idNumberRegexInput();
+
 
         public static StudentRegisterModal Instance
         {
@@ -29,7 +36,7 @@ namespace LibDefender
             Courses();
         }
 
-        private void RegisterStudentQuery(string query, BigInteger rfidUID, string studentID, string studentName, string course, string email, string contactNumber)
+        private void RegisterStudentQuery(string query, BigInteger rfidUID, string studentID, string studentName, int course, string email, string contactNumber)
         {
             using var connection = new MySqlConnection(connectionString);
             using var command = new MySqlCommand(query, connection);
@@ -66,6 +73,19 @@ namespace LibDefender
             }
         }
 
+        private int GetCourseIDQuery(string courseName)
+        {
+            using var connection = new MySqlConnection(connectionString);
+            connection.Open();
+
+            string query = "SELECT courseID FROM courses WHERE courseName = @courseName";
+            using var command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue("@courseName", courseName);
+
+            int courseID = Convert.ToInt32(command.ExecuteScalar());
+            return courseID;
+        }
+
         private void FetchCoursesQuery(string fetchCourseQuery)
         {
             using var connection = new MySqlConnection(connectionString);
@@ -91,9 +111,11 @@ namespace LibDefender
             BigInteger rfidUID = BigInteger.Parse(rfidTxtBox.Text);
             string studentID = idTxtBox.Text;
             string studentName = studentNameTxtBox.Text;
-            string course = courseComboBox.Text;
+            string courseName = courseComboBox.Text;
             string email = emailTxtBox.Text;
             string contactNumber = contactNumberTxtBox.Text;
+
+            int course = GetCourseIDQuery(courseName);
 
             string query = "INSERT INTO students (studentRfid, studentID, studentName, course, email, contactNumber)" +
                 "VALUES (@rfidUID, @studentID, @studentName, @course, @email, @contactNumber)";
@@ -116,6 +138,42 @@ namespace LibDefender
         {
             string fetchCourseQuery = "SELECT courseName FROM courses";
             FetchCoursesQuery(fetchCourseQuery);
+        }
+
+        private void RfidTxtBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            Regex rfidInput = rfidRegexInput();
+
+            if (!rfidInput.IsMatch(e.Text))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void IdTxtBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            Regex idNumberInput = idNumberRegexInput();
+
+            if (!idNumberInput.IsMatch(e.Text))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void Rfid_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (rfidTxtBox.Text.Length == 10)
+            {
+                idTxtBox.Focus();
+            }
+        }
+
+        private void IdTxtBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (idTxtBox.Text.Length == 7)
+            {
+                studentNameTxtBox.Focus();
+            }
         }
     }
 }
