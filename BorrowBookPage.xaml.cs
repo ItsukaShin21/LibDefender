@@ -1,37 +1,58 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using MySql.Data.MySqlClient;
 
 namespace LibDefender
 {
     public partial class BorrowBookPage : Page
     {
+        readonly string connectionString = DatabaseConfig.systemDatabase;
+
         public BorrowBookPage()
         {
             InitializeComponent();
-            PopulateDataGrid();
             this.DataContext = this;
         }
 
-        private void PopulateDataGrid()
+        private void BorrowedBookListQuery(string borrowedBookListQuery)
         {
-            var dummyData = new ObservableCollection<DummyItem3>(new[]
-            {
-                new DummyItem3 { StudentID = 1, BookID = 23423, DateBurrowed = "Feb 19, 2024 12:34:26", DueDate = "Feb 20, 2024 12:34:26" },
-                new DummyItem3 { StudentID = 2, BookID = 5643, DateBurrowed = "Feb 19, 2024 12:34:26", DueDate = "Feb 20, 2024 12:34:26" },
-                new DummyItem3 { StudentID = 3, BookID = 6777, DateBurrowed = "Feb 19, 2024 12:34:26", DueDate = "Feb 20, 2024 12:34:26" }
-            });
+            using var connection = new MySqlConnection(connectionString);
+            using var command = new MySqlCommand(borrowedBookListQuery, connection);
 
-            // Set the ItemsSource of the DataGrid to the collection
-            DataGrid.ItemsSource = dummyData;
+            connection.Open();
+
+            DataTable newData = new();
+
+            using MySqlDataAdapter dataAdapter = new(command);
+            dataAdapter.Fill(newData);
+
+            BorrowedBooksList.ItemsSource = newData.DefaultView;
         }
-    }
 
-    public class DummyItem3
-    {
-        public int StudentID { get; set; }
-        public int BookID { get; set; }
-        public string? DateBurrowed { get; set; }
-        public string? DueDate { get; set; }
+        public void RefreshBorrowedBookList()
+        {
+            string borrowedBookListQuery = "SELECT borrowedbooks.borrowID,books.bookName,students.studentName," +
+                                           "borrowedbooks.borrowDate,borrowedbooks.returnDate FROM borrowedbooks " +
+                                           "JOIN books ON borrowedbooks.bookRfid = books.bookRfid " +
+                                           "JOIN students ON borrowedbooks.studentRfid = students.studentRfid;";
+            BorrowedBookListQuery(borrowedBookListQuery);
+        }
+
+        private void BorrowBookPage_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            RefreshBorrowedBookList();
+        }
+
+        private void BorrowBookModalButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var adminWindow = Application.Current.Windows.OfType<AdminWindow>().FirstOrDefault();
+
+            if (adminWindow != null)
+            {
+                adminWindow.Blur.Visibility = Visibility.Visible;
+            }
+            BorrowBookModal.Instance.ShowDialog();
+        }
     }
 }

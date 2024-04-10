@@ -91,7 +91,8 @@
                     BorderBrush="{x:Null}"
                     FontFamily="Roboto"
                     MaxLength="7"
-                    PreviewTextInput="IdTxtBox_PreviewTextInput" TextChanged="IdTxtBox_TextChanged" />
+                    PreviewTextInput="IdTxtBox_PreviewTextInput"
+                    TextChanged="IdTxtBox_TextChanged" />
             </Border>
         </Grid>
         <Grid Grid.Row="3">

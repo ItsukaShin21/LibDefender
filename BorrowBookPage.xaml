@@ -9,6 +9,7 @@
     d:DesignHeight="1004.4"
     d:DesignWidth="1536"
     Background="#FF1B2431"
+    Loaded="BorrowBookPage_Loaded"
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
@@ -22,6 +23,7 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Content="Borrowed Books"
+                FontFamily="Roboto"
                 FontSize="36"
                 FontWeight="Bold"
                 Foreground="White" />
@@ -41,6 +43,7 @@
                     VerticalContentAlignment="Center"
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
+                    FontFamily="Roboto"
                     SelectionBrush="#FF3C99EB"
                     TextWrapping="Wrap" />
             </Border>
@@ -53,20 +56,23 @@
                 Background="#FF4880FF"
                 CornerRadius="10,10,10,10">
                 <Button
+                    x:Name="BorrowBookModalButton"
                     Width="164"
                     Height="42"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
-                    Content="Burrow"
-                    Foreground="White" />
+                    Content="Borrow"
+                    FontFamily="Roboto"
+                    FontWeight="Medium"
+                    Foreground="White" Click="BorrowBookModalButton_Click" />
             </Border>
         </Grid>
 
         <Grid Grid.Row="1">
             <DataGrid
-                x:Name="DataGrid"
+                x:Name="BorrowedBooksList"
                 Width="1128.8"
                 Height="650"
                 HorizontalAlignment="Center"
@@ -83,11 +89,12 @@
                 CanUserResizeRows="False"
                 CanUserSortColumns="False"
                 ColumnHeaderHeight="40"
+                FontFamily="Roboto"
                 Foreground="Black"
                 HorizontalGridLinesBrush="White"
                 RowBackground="#2D86B3FF"
                 RowHeaderWidth="0"
-                RowHeight="35"
+                RowHeight="50"
                 SelectionUnit="Cell"
                 VerticalGridLinesBrush="{x:Null}">
                 <DataGrid.ColumnHeaderStyle>
@@ -95,6 +102,7 @@
                         <Setter Property="HorizontalContentAlignment" Value="Center" />
                         <Setter Property="Background" Value="#2D86B3FF" />
                         <Setter Property="Foreground" Value="#FFF" />
+                        <Setter Property="FontWeight" Value="Bold" />
                     </Style>
                 </DataGrid.ColumnHeaderStyle>
                 <DataGrid.CellStyle>
@@ -115,36 +123,92 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding BookID}"
+                        Binding="{Binding borrowID}"
                         CanUserReorder="False"
                         CanUserResize="False"
                         CanUserSort="False"
-                        Header="Burrowed Book"
+                        Header="ID"
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding StudentID}"
+                        Binding="{Binding bookName}"
                         CanUserReorder="False"
                         CanUserResize="False"
                         CanUserSort="False"
-                        Header="Burrower"
+                        Header="Book Name"
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding DateBurrowed}"
+                        Binding="{Binding studentName}"
                         CanUserReorder="False"
                         CanUserResize="False"
                         CanUserSort="False"
-                        Header="Date Burrowed"
+                        Header="Borrower"
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding DueDate}"
+                        Binding="{Binding borrowDate, StringFormat='{}{0:MMMM d, yyyy} at {0:h:mm tt}'}"
+                        CanUserReorder="False"
+                        CanUserResize="False"
+                        CanUserSort="False"
+                        Header="Date Borrowed"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding returnDate, StringFormat='{}{0:MMMM d, yyyy} at {0:h:mm tt}'}"
                         CanUserReorder="False"
                         CanUserResize="False"
                         CanUserSort="False"
                         Header="Due Date"
                         IsReadOnly="True" />
+                    <DataGridTemplateColumn
+                        Width="*"
+                        CanUserReorder="False"
+                        CanUserResize="False"
+                        CanUserSort="False"
+                        Header="Actions"
+                        IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                                    <Border
+                                        Width="60"
+                                        Height="30"
+                                        Margin="0,0,20,0"
+                                        Background="#FF00B69B"
+                                        CornerRadius="3,3,3,3">
+                                        <Button
+                                            Width="60"
+                                            Height="30"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            Background="{x:Null}"
+                                            BorderBrush="{x:Null}"
+                                            Content="Returned"
+                                            Foreground="#FFF" />
+                                    </Border>
+                                    <Border
+                                        Width="60"
+                                        Height="30"
+                                        Background="#FFFE5C73"
+                                        CornerRadius="3,3,3,3">
+                                        <Button
+                                            x:Name="DeleteButton"
+                                            Width="60"
+                                            Height="30"
+                                            Background="{x:Null}"
+                                            BorderBrush="{x:Null}"
+                                            CommandParameter="{Binding}"
+                                            Content="Remove"
+                                            Foreground="#FFF" />
+                                    </Border>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
