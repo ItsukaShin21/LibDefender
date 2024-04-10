@@ -58,10 +58,12 @@
                 VerticalAlignment="Center"
                 Background="#FFF">
                 <TextBox
+                    x:Name="StudentRfidTxtBox"
                     Padding="10,0,0,0"
                     VerticalContentAlignment="Center"
                     FontFamily="Roboto"
-                    MaxLength="7" />
+                    MaxLength="10"
+                    TextChanged="StudentRfidTxtBox_TextChanged" />
             </Border>
         </Grid>
 
@@ -82,10 +84,12 @@
                 VerticalAlignment="Center"
                 Background="#FFF">
                 <TextBox
+                    x:Name="BookRfidTxtBox"
                     Padding="10,0,0,0"
                     VerticalContentAlignment="Center"
                     FontFamily="Roboto"
-                    MaxLength="10" />
+                    MaxLength="10"
+                    TextChanged="BookRfidTxtBox_TextChanged" />
             </Border>
         </Grid>
 
@@ -105,40 +109,43 @@
                     FontFamily="Roboto"
                     FontWeight="Bold" />
                 <Label
-                    Margin="10,50,0,0"
+                    Margin="20,50,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Content="Name :"
                     FontFamily="Roboto"
                     FontWeight="Medium" />
                 <Label
-                    Margin="60,50,0,0"
+                    x:Name="NameTxtLabel"
+                    Margin="74,50,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Content="StudentName"
                     FontFamily="Roboto" />
                 <Label
-                    Margin="10,80,0,0"
+                    Margin="15,80,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Content="Course :"
                     FontFamily="Roboto"
                     FontWeight="Medium" />
                 <Label
-                    Margin="60,80,0,0"
+                    x:Name="CourseTxtLabel"
+                    Margin="74,80,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Content="StudentCourse"
                     FontFamily="Roboto" />
                 <Label
-                    Margin="10,110,0,0"
+                    Margin="23,110,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Content="Email :"
                     FontFamily="Roboto"
                     FontWeight="Medium" />
                 <Label
-                    Margin="60,110,0,0"
+                    x:Name="EmailTxtLabel"
+                    Margin="74,110,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Content="StudentEmail"
@@ -151,10 +158,11 @@
                     FontFamily="Roboto"
                     FontWeight="Medium" />
                 <Label
-                    Margin="60,140,0,0"
+                    x:Name="ContactTxtLabel"
+                    Margin="74,140,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
-                    Content="ContactNumber"
+                    ContentStringFormat="00000000000"
                     FontFamily="Roboto" />
             </Grid>
         </Grid>
@@ -164,6 +172,7 @@
             Grid.RowSpan="3"
             Grid.Column="1">
             <DataGrid
+                x:Name="BorrowedBookList"
                 Width="580"
                 Height="280"
                 HorizontalAlignment="Center"
@@ -182,14 +191,34 @@
                 CanUserSortColumns="False"
                 ColumnHeaderHeight="30"
                 FontFamily="Roboto"
+                FontSize="10"
+                HorizontalGridLinesBrush="#FFF"
+                RowBackground="#2D86B3FF"
                 RowHeaderWidth="0"
-                RowHeight="20"
+                RowHeight="50"
                 SelectionUnit="Cell"
                 VerticalGridLinesBrush="{x:Null}"
                 VerticalScrollBarVisibility="Visible">
+
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Foreground" Value="#FFF" />
+                        <Setter Property="HorizontalAlignment" Value="Center" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="DataGridCell">
+                                    <Grid Background="{TemplateBinding Background}">
+                                        <ContentPresenter VerticalAlignment="Center" />
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DataGrid.CellStyle>
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         Width="*"
+                        Binding="{Binding bookName}"
                         CanUserReorder="False"
                         CanUserResize="False"
                         CanUserSort="False"
@@ -197,6 +226,7 @@
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="*"
+                        Binding="{Binding borrowDate, StringFormat='{}{0:MMMM d, yyyy} at {0:h:mm tt}'}"
                         CanUserReorder="False"
                         CanUserResize="False"
                         CanUserSort="False"
@@ -204,6 +234,7 @@
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="*"
+                        Binding="{Binding returnDate, StringFormat='{}{0:MMMM d, yyyy} at {0:h:mm tt}'}"
                         CanUserReorder="False"
                         CanUserResize="False"
                         CanUserSort="False"
