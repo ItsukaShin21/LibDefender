@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Text.RegularExpressions;
 using System.Windows;
 using MySql.Data.MySqlClient;
 
@@ -7,6 +8,11 @@ namespace LibDefender
     public partial class BorrowBookModal : Window
     {
         readonly string connectionString = DatabaseConfig.systemDatabase;
+
+        [GeneratedRegex("[0-9]+")]
+        private static partial Regex studentRfidRegexInput();
+        [GeneratedRegex("[0-9]+")]
+        private static partial Regex bookRfidRegexInput();
 
         private static BorrowBookModal? newInstance;
 
@@ -85,6 +91,20 @@ namespace LibDefender
             BorrowedBookList.ItemsSource = newData.DefaultView;
         }
 
+        private void UpdateBookQuery()
+        {
+            string bookRfid = BookRfidTxtBox.Text;
+
+            string updateBookQuery = "UPDATE books SET status = 'Borrowed' WHERE bookRfid = @bookRfid";
+            using var connection = new MySqlConnection(connectionString);
+            using var command = new MySqlCommand(updateBookQuery, connection);
+
+            command.Parameters.AddWithValue("@bookRfid", bookRfid);
+
+            connection.Open();
+            command.ExecuteNonQuery();
+        }
+
         private void BorrowBookQuery()
         {
             if (!string.IsNullOrEmpty(StudentRfidTxtBox.Text) && !string.IsNullOrEmpty(BookRfidTxtBox.Text))
@@ -115,6 +135,7 @@ namespace LibDefender
            if (StudentRfidTxtBox.Text.Length == 10)
             {
                 FetchStudentQuery();
+                BookRfidTxtBox.Focus();
             }
         }
 
@@ -122,7 +143,40 @@ namespace LibDefender
         {
                 FetchStudentBorrowedBooks();
                 BorrowBookQuery();
+                UpdateBookQuery();
+
                 BookRfidTxtBox.Text = "";
+        }
+
+        private void StudentRfidTxtBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            Regex rfidInput = studentRfidRegexInput();
+
+            if (!rfidInput.IsMatch(e.Text))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void BookRfidTxtBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            Regex rfidInput = bookRfidRegexInput();
+
+            if (!rfidInput.IsMatch(e.Text))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+            var adminWindow = Application.Current.Windows.OfType<AdminWindow>().FirstOrDefault();
+
+            if (adminWindow != null)
+            {
+                adminWindow.Blur.Visibility = Visibility.Hidden;
+            }
         }
     }
 }

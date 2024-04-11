@@ -22,9 +22,30 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Content="Student Log"
+                FontFamily="Roboto"
                 FontSize="36"
                 FontWeight="Bold"
                 Foreground="White" />
+            <Border
+                Width="250"
+                Height="42"
+                Margin="0,0,730,0"
+                HorizontalAlignment="Right"
+                Background="White"
+                CornerRadius="10,10,10,10">
+                <TextBox
+                    x:Name="RfidTxtBox"
+                    Width="250"
+                    Height="42"
+                    Padding="20,0,0,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Background="{x:Null}"
+                    BorderBrush="{x:Null}"
+                    SelectionBrush="#FF3C99EB"
+                    TextWrapping="Wrap" TextChanged="RfidTxtBox_TextChanged" />
+            </Border>
             <Border
                 Width="451"
                 Height="42"
@@ -60,6 +81,8 @@
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
                     Content="Export"
+                    FontFamily="Roboto"
+                    FontWeight="Medium"
                     Foreground="White" />
             </Border>
         </Grid>
@@ -83,6 +106,7 @@
                 CanUserResizeRows="False"
                 CanUserSortColumns="False"
                 ColumnHeaderHeight="40"
+                FontFamily="Roboto"
                 Foreground="Black"
                 HorizontalGridLinesBrush="White"
                 RowBackground="#2D86B3FF"
