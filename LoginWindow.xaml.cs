@@ -1,19 +1,22 @@
-﻿using MySql.Data.MySqlClient;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
+using System.Windows.Input;
 using System.Windows.Threading;
 
 namespace LibDefender
 {
     public partial class LoginWindow : Window
     {
-        readonly string connectionString = DatabaseConfig.systemDatabase;
         private readonly DispatcherTimer errorMessageTimer = new();
         private bool isRfidErrorShown = true;
         private bool isPasswordErrorShown = true;
         private bool isFieldErrorShown = true;
+        private const int uidLength = 10;
+
+        [GeneratedRegex("[0-9]+")]
+        private static partial Regex rfidRegexInput();
+        [GeneratedRegex("[A-Za-z0-9!@#]+")]
+        private static partial Regex passwordRegexInput();
 
         private static LoginWindow? newInstance;
         public static LoginWindow Instance
@@ -31,90 +34,72 @@ namespace LibDefender
             errorMessageTimer.Interval = TimeSpan.FromSeconds(2);
             errorMessageTimer.Tick += ErrorMessageTimer_Tick;
         }
-        private static void SetPlaceholder(string placeholder, TextBox textbox)
-        {
-            textbox.Text = placeholder;
-            textbox.Foreground = Brushes.Gray;
-            textbox.Tag = placeholder;
-        }
-        private static void UnsetPlaceholder(string placeholder, TextBox textbox)
-        {
-            textbox.Text = placeholder;
-            textbox.Foreground = Brushes.Black;
-            textbox.Tag = placeholder;
-        }
+
+        //Function for Handling the timer of error messages
         private void ErrorMessageTimer_Tick(object? sender, EventArgs e)
         {
-            if (isRfidErrorShown)
-            {
-                Rfidtxtbox_ErrorMessage.Visibility = Visibility.Hidden;
-                isRfidErrorShown = false;
-            }
-            if (isPasswordErrorShown)
-            {
-                Passwordtxtbox_ErrrorMessage.Visibility = Visibility.Hidden;
-                isPasswordErrorShown = false;
-            }
-            if (isFieldErrorShown)
-            {
-                ErrorMessage.Visibility = Visibility.Hidden;
-                isFieldErrorShown = false;
-            }
-            if (isRfidErrorShown && isPasswordErrorShown && isFieldErrorShown)
+            HideErrorMessage(Rfidtxtbox_ErrorMessage, ref isRfidErrorShown);
+            HideErrorMessage(Passwordtxtbox_ErrrorMessage, ref isPasswordErrorShown);
+            HideErrorMessage(ErrorMessage, ref isFieldErrorShown);
+
+            if (!isRfidErrorShown && !isPasswordErrorShown && !isFieldErrorShown)
             {
                 errorMessageTimer.Stop();
                 ErrorMessage.Visibility = Visibility.Hidden;
             }
         }
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            SetPlaceholder("Enter your RFID UID", rfiduidTxtBox);
-            SetPlaceholder("Enter your Password", passwordTxtBox);
-            rfiduidTxtBox.Focus();
-        }
 
-        private void RfiduidTxtBox_LostFocus(object sender, RoutedEventArgs e)
+        //Function to handle the visibility fo error messages
+        private static void HideErrorMessage(UIElement errorMessage, ref bool isErrorShown)
         {
-            if (string.IsNullOrWhiteSpace(rfiduidTxtBox.Text))
+            if (isErrorShown)
             {
-                SetPlaceholder("Enter your RFID UID", rfiduidTxtBox);
+                errorMessage.Visibility = Visibility.Hidden;
+                isErrorShown = false;
             }
         }
 
-        private void RfiduidTxtBox_GotFocus(object sender, RoutedEventArgs e)
+        //Function to validate the textboxes if empty or not
+        private bool ValidateInputs()
         {
-            if (rfiduidTxtBox.Text == "Enter your RFID UID")
+            bool isValid = true;
+
+            if (uidPlaceholder.Visibility == Visibility.Visible || string.IsNullOrWhiteSpace(rfiduidTxtBox.Password))
             {
-                UnsetPlaceholder("", rfiduidTxtBox);
+                Rfidtxtbox_ErrorMessage.Visibility = Visibility.Visible;
+                isRfidErrorShown = true;
+                isValid = false;
+            }
+
+            if (passwordPlaceholder.Visibility == Visibility.Visible || string.IsNullOrWhiteSpace(passwordTxtBox.Password))
+            {
+                Passwordtxtbox_ErrrorMessage.Visibility = Visibility.Visible;
+                isPasswordErrorShown = true;
+                isValid = false;
+            }
+
+            if (!isValid && !errorMessageTimer.IsEnabled)
+            {
+                errorMessageTimer.Interval = TimeSpan.FromSeconds(2);
+                errorMessageTimer.Start();
+            }
+
+            return isValid;
+        }
+
+        //Function to validate the Regex of the textboxes
+        private static void RegexValidation(TextCompositionEventArgs e, Regex regex)
+        {
+            if (!regex.IsMatch(e.Text))
+            {
+                e.Handled = true;
             }
         }
 
-        private void PasswordTxtBox_LostFocus(object sender, RoutedEventArgs e)
+        //Function for logging in the user
+        private async Task LoginQuery(string rfiduid, string password)
         {
-            if (string.IsNullOrWhiteSpace(passwordTxtBox.Text))
-            {
-                SetPlaceholder("Enter your Password", passwordTxtBox);
-            }
-        }
-
-        private void PasswordTxtBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            if (passwordTxtBox.Text == "Enter your Password")
-            {
-                UnsetPlaceholder("", passwordTxtBox);
-            }
-        }
-
-        private void LoginQuery(string query, string rfiduid, string password)
-        {
-            using var connection = new MySqlConnection(connectionString);
-            using var command = new MySqlCommand(query, connection);
-            command.Parameters.AddWithValue("@rfiduid", rfiduid);
-            command.Parameters.AddWithValue("@password", password);
-
-            connection.Open();
-
-            int result = Convert.ToInt32(command.ExecuteScalar());
+            int result = await DatabaseQueries.AuthenticateUser(rfiduid, password);
 
             if (result > 0)
             {
@@ -125,73 +110,86 @@ namespace LibDefender
             else
             {
                 ErrorMessage.Visibility = Visibility.Visible;
-                errorMessageTimer.Interval = TimeSpan.FromSeconds(2); // Changed to 2 seconds
+                errorMessageTimer.Interval = TimeSpan.FromSeconds(2);
                 errorMessageTimer.Start();
                 isFieldErrorShown = true;
-                rfiduidTxtBox.Text = "";
-                passwordTxtBox.Text = "";
+                rfiduidTxtBox.Password = "";
+                passwordTxtBox.Password = "";
                 rfiduidTxtBox.Focus();
             }
         }
-        private void LoginButton_Click(object sender, RoutedEventArgs e)
-        {
-            string rfiduid = rfiduidTxtBox.Text;
-            string password = passwordTxtBox.Text;
 
-            if (rfiduid == "Enter your RFID UID" || rfiduid == "" || password == "Enter your Password" || password == "")
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            rfiduidTxtBox.Focus();
+        }
+
+        private void RfiduidTxtBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(rfiduidTxtBox.Password))
             {
-                if (rfiduid == "Enter your RFID UID" || rfiduid == "")
-                {
-                    Rfidtxtbox_ErrorMessage.Visibility = Visibility.Visible;
-                    isRfidErrorShown = true;
-                }
-                if (password == "Enter your Password" || password == "")
-                {
-                    Passwordtxtbox_ErrrorMessage.Visibility = Visibility.Visible;
-                    isPasswordErrorShown = true;
-                }
-                // Set the timer interval and start it only if it's not already running
-                if (!errorMessageTimer.IsEnabled)
-                {
-                    errorMessageTimer.Interval = TimeSpan.FromSeconds(2); // Changed to 2 seconds
-                    errorMessageTimer.Start();
-                }
+                uidPlaceholder.Visibility = Visibility.Visible;
             }
-            else
+        }
+
+        private void RfiduidTxtBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(rfiduidTxtBox.Password))
             {
-                string query = "SELECT COUNT(*) FROM users WHERE userRfid = @rfiduid AND password = @password";
-                LoginQuery(query, rfiduid, password);
+                uidPlaceholder.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void PasswordTxtBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(passwordTxtBox.Password))
+            {
+                passwordPlaceholder.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void PasswordTxtBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(passwordTxtBox.Password))
+            {
+                passwordPlaceholder.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private async void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (ValidateInputs())
+            {
+                string rfiduid = rfiduidTxtBox.Password;
+                string password = passwordTxtBox.Password;
+                await LoginQuery(rfiduid, password);
+                passwordPlaceholder.Visibility = Visibility.Visible;
             }
         }
         private void RfiduidTxtBox_TextChanged(object sender, RoutedEventArgs e)
         {
-            if (rfiduidTxtBox.Text.Length == 10)
+            if (rfiduidTxtBox.Password.Length == uidLength)
             {
                 passwordTxtBox.Focus();
             }
         }
         private void Rfidtxtbox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            Regex rfidInput = rfidRegexInput();
-
-            if (!rfidInput.IsMatch(e.Text))
-            {
-                e.Handled = true;
-            }
+            RegexValidation(e, rfidRegexInput());
         }
         private void Passwordtxtbox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            Regex passwordInput = passwordRegexInput();
-
-            if (!passwordInput.IsMatch(e.Text))
-            {
-                e.Handled = true;
-            }
+            RegexValidation(e, passwordRegexInput());
         }
 
-        [GeneratedRegex("[0-9]+")]
-        private static partial Regex rfidRegexInput();
-        [GeneratedRegex("[A-Za-z0-9!@#]+")]
-        private static partial Regex passwordRegexInput();
+        private void UidPlaceholder_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            rfiduidTxtBox.Focus();
+        }
+
+        private void PasswordPlaceholder_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            passwordTxtBox.Focus();
+        }
     }
 }

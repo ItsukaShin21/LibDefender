@@ -54,7 +54,7 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
             Background="#FFEDF2F7">
-            <TextBox
+            <PasswordBox
                 x:Name="rfiduidTxtBox"
                 Width="402"
                 Height="50"
@@ -67,8 +67,8 @@
                 GotFocus="RfiduidTxtBox_GotFocus"
                 LostFocus="RfiduidTxtBox_LostFocus"
                 MaxLength="10"
-                PreviewTextInput="Rfidtxtbox_PreviewTextInput"
-                TextChanged="RfiduidTxtBox_TextChanged" />
+                PasswordChanged="RfiduidTxtBox_TextChanged"
+                PreviewTextInput="Rfidtxtbox_PreviewTextInput" />
         </Border>
 
         <Border
@@ -78,8 +78,10 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Background="#FFEDF2F7">
-            <TextBox
+            <PasswordBox
                 x:Name="passwordTxtBox"
+                Width="402"
+                Height="50"
                 Padding="50,12,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
@@ -123,6 +125,26 @@
             VerticalAlignment="Top"
             Source="/Resources/passwordIcon.png"
             Stretch="Fill" />
+        <Label
+            x:Name="uidPlaceholder"
+            Margin="85,223,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Content="Enter your RFID UID"
+            FontFamily="Roboto"
+            FontSize="18"
+            Foreground="Gray"
+            MouseLeftButtonUp="UidPlaceholder_MouseLeftButtonUp" />
+        <Label
+            x:Name="passwordPlaceholder"
+            Margin="85,312,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Content="Enter your Password"
+            FontFamily="Roboto"
+            FontSize="18"
+            Foreground="Gray"
+            MouseLeftButtonUp="PasswordPlaceholder_MouseLeftButtonUp" />
         <Rectangle
             x:Name="overlay"
             Fill="#80000000"
