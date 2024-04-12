@@ -99,7 +99,7 @@ namespace LibDefender
         //Function for logging in the user
         private async Task LoginQuery(string rfiduid, string password)
         {
-            int result = await DatabaseQueries.AuthenticateUser(rfiduid, password);
+            int result = await Authentication.AuthenticateUser(rfiduid, password);
 
             if (result > 0)
             {

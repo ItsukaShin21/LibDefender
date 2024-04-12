@@ -2,7 +2,7 @@
 
 namespace LibDefender
 {
-    public static class DatabaseQueries
+    public static class Authentication
     {
         readonly static string connectionString = DatabaseConfig.systemDatabase;
 
