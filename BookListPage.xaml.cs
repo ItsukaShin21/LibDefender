@@ -1,39 +1,18 @@
 ﻿using System.Data;
 using System.Windows;
 using System.Windows.Controls;
-using MySql.Data.MySqlClient;
 
 namespace LibDefender
 {
     public partial class BookListPage : Page
     {
-        readonly string connectionString = DatabaseConfig.systemDatabase;
+        public static BookListPage CurrentInstance { get; private set; } = null!;
 
         public BookListPage()
         {
             InitializeComponent();
             this.DataContext = this;
-        }
-
-        private void BooksListQuery(string bookListQuery)
-        {
-            using var connection = new MySqlConnection(connectionString);
-            using var command = new MySqlCommand(bookListQuery, connection);
-
-            connection.Open();
-
-            DataTable newData = new();
-
-            using MySqlDataAdapter dataAdapter = new(command);
-            dataAdapter.Fill(newData);
-
-            BooksList.ItemsSource = newData.DefaultView;
-        }
-
-        public void RefreshBooksList()
-        {
-            string booksListQuery = "SELECT * FROM books";
-            BooksListQuery(booksListQuery);
+            CurrentInstance = this;
         }
 
         private void DeleteButton_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -47,8 +26,8 @@ namespace LibDefender
                 var result = MessageBox.Show($"Are you sure you want to delete {bookName}?", "Confirm Deletion", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.Yes)
                 {
-                    BookDeleteQuery(bookRfid!);
-                    RefreshBooksList();
+                    BookManager.DeleteBook(bookRfid!);
+                    DataFetcher.FetchBooks();
                 }
             }
             else
@@ -57,27 +36,14 @@ namespace LibDefender
             }
         }
 
-        private void BookDeleteQuery(string bookRfid)
-        {
-            try
-            {
-                using var connection = new MySqlConnection(connectionString);
-                using var command = new MySqlCommand("DELETE FROM books WHERE bookRfid = @bookRfid", connection);
-                command.Parameters.AddWithValue("@bookRfid", bookRfid);
-
-                connection.Open();
-                command.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                // Handle or log the exception as appropriate
-                MessageBox.Show($"Error deleting the book: {ex.Message}");
-            }
-        }
-
         private void BookListPage_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            RefreshBooksList();
+            progressRing.IsActive = true;
+
+            DataFetcher.FetchBooks();
+            BookManager.RefreshBookStatus();
+
+            progressRing.IsActive = false;
         }
 
         private void BookRegisterModalButton_Click(object sender, RoutedEventArgs e)

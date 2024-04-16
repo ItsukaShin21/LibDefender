@@ -48,13 +48,14 @@
             Foreground="White" />
 
         <Border
+            x:Name="border"
             Width="402"
             Height="50"
             Margin="0,214,9,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
             Background="#FFEDF2F7">
-            <PasswordBox
+            <TextBox
                 x:Name="rfiduidTxtBox"
                 Width="402"
                 Height="50"
@@ -67,8 +68,8 @@
                 GotFocus="RfiduidTxtBox_GotFocus"
                 LostFocus="RfiduidTxtBox_LostFocus"
                 MaxLength="10"
-                PasswordChanged="RfiduidTxtBox_TextChanged"
-                PreviewTextInput="Rfidtxtbox_PreviewTextInput" />
+                PreviewTextInput="Rfidtxtbox_PreviewTextInput"
+                TextChanged="RfiduidTxtBox_TextChanged" />
         </Border>
 
         <Border

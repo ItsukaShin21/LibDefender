@@ -1,21 +1,19 @@
-﻿using MySql.Data.MySqlClient;
-using System.Data;
-using System.Numerics;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Media;
 
 namespace LibDefender
 {
     public partial class StudentRegisterModal : Window
     {
         private static StudentRegisterModal? newInstance;
-        readonly string connectionString = DatabaseConfig.systemDatabase;
 
         [GeneratedRegex("[0-9]+")]
         private static partial Regex rfidRegexInput();
         [GeneratedRegex("[0-9]+")]
         private static partial Regex idNumberRegexInput();
 
+        public static StudentRegisterModal CurrentInstance { get; private set; } = null!;
 
         public static StudentRegisterModal Instance
         {
@@ -33,98 +31,27 @@ namespace LibDefender
         {
             InitializeComponent();
             this.Owner = Application.Current.MainWindow as AdminWindow;
-            Courses();
-        }
-
-        private void RegisterStudentQuery(string query, BigInteger rfidUID, string studentID, string studentName, int course, string email, string contactNumber)
-        {
-            using var connection = new MySqlConnection(connectionString);
-            using var command = new MySqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@rfidUID", rfidUID);
-            command.Parameters.AddWithValue("@studentID", studentID);
-            command.Parameters.AddWithValue("@studentName", studentName);
-            command.Parameters.AddWithValue("@course", course);
-            command.Parameters.AddWithValue("@email", email);
-            command.Parameters.AddWithValue("@contactNumber", contactNumber);
-
-            connection.Open();
-
-            int result = Convert.ToInt32(command.ExecuteScalar());
-
-            if (result == 0)
-            {
-                this.Close();
-                MessageBox.Show($"{studentName} has been successfully registered!");
-                connection.Close();
-
-                var adminWindow = Application.Current.Windows.OfType<AdminWindow>().FirstOrDefault();
-
-                if (adminWindow != null)
-                {
-                    adminWindow.Blur.Visibility = Visibility.Hidden;
-                }
-
-            }
-            else
-            {
-                MessageBox.Show("Registration is failed!");
-
-            }
-        }
-
-        private int GetCourseIDQuery(string courseName)
-        {
-            using var connection = new MySqlConnection(connectionString);
-            connection.Open();
-
-            string query = "SELECT courseID FROM courses WHERE courseName = @courseName";
-            using var command = new MySqlCommand(query, connection);
-            command.Parameters.AddWithValue("@courseName", courseName);
-
-            int courseID = Convert.ToInt32(command.ExecuteScalar());
-            return courseID;
-        }
-
-        private void FetchCoursesQuery(string fetchCourseQuery)
-        {
-            using var connection = new MySqlConnection(connectionString);
-            using var command = new MySqlCommand(fetchCourseQuery, connection);
-
-            connection.Open();
-
-            DataTable courses = new();
-
-            using MySqlDataAdapter dataAdapter = new(command);
-            dataAdapter.Fill(courses);
-
-            connection.Close();
-
-            courseComboBox.ItemsSource = courses.DefaultView;
-
-            courseComboBox.DisplayMemberPath = "courseName";
-
+            CurrentInstance = this;
+            DataFetcher.FetchCourseNames();
         }
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
-            BigInteger rfidUID = BigInteger.Parse(rfidTxtBox.Text);
+            string rfidUID = rfidTxtBox.Text;
             string studentID = idTxtBox.Text;
             string studentName = studentNameTxtBox.Text;
             string courseName = courseComboBox.Text;
             string email = emailTxtBox.Text;
             string contactNumber = contactNumberTxtBox.Text;
 
-            int course = GetCourseIDQuery(courseName);
+            int course = DataFetcher.FetchCourseID(courseName);
 
-            string query = "INSERT INTO students (studentRfid, studentID, studentName, course, email, contactNumber)" +
-                "VALUES (@rfidUID, @studentID, @studentName, @course, @email, @contactNumber)";
-
-            RegisterStudentQuery(query, rfidUID, studentID, studentName, course, email, contactNumber);
+            StudentManager.InsertStudent(rfidUID, studentID, studentName, course, email, contactNumber);
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+            DataFetcher.FetchStudentsData();
             this.Close();
             var adminWindow = Application.Current.Windows.OfType<AdminWindow>().FirstOrDefault();
 
@@ -132,12 +59,6 @@ namespace LibDefender
             {
                 adminWindow.Blur.Visibility = Visibility.Hidden;
             }
-        }
-
-        private void Courses()
-        {
-            string fetchCourseQuery = "SELECT courseName FROM courses";
-            FetchCoursesQuery(fetchCourseQuery);
         }
 
         private void RfidTxtBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
@@ -165,6 +86,8 @@ namespace LibDefender
             if (rfidTxtBox.Text.Length == 10)
             {
                 idTxtBox.Focus();
+                rfidTxtBox.IsEnabled = false;
+                border.Background = Brushes.Gray;
             }
         }
 
@@ -174,6 +97,11 @@ namespace LibDefender
             {
                 studentNameTxtBox.Focus();
             }
+        }
+
+        private void StudentRegisterModal_Loaded(object sender, RoutedEventArgs e)
+        {
+            rfidTxtBox.Focus();
         }
     }
 }

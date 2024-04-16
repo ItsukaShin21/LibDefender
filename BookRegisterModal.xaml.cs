@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
 using System.Windows;
-using System.Windows.Input;
-using MySql.Data.MySqlClient;
+using System.Windows.Media;
 
 
 namespace LibDefender
@@ -9,7 +8,6 @@ namespace LibDefender
     public partial class BookRegisterModal : Window
     {
         private static BookRegisterModal? newInstance;
-        readonly string connectionString = DatabaseConfig.systemDatabase;
 
         public static BookRegisterModal Instance
         {
@@ -41,24 +39,19 @@ namespace LibDefender
             }
         }
 
-        private void RegisterBookQuery(string query, BigInteger rfidUID, string bookName, string authorName)
+        private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
-            using var connection = new MySqlConnection(connectionString);
-            using var command = new MySqlCommand(query, connection);
+            BigInteger rfidUID = BigInteger.Parse(rfidTxtBox.Text);
+            string bookName = bookNameTxtBox.Text;
+            string authorName = authorTxtBox.Text;
 
-            command.Parameters.AddWithValue("@rfidUID", rfidUID);
-            command.Parameters.AddWithValue("@bookName", bookName);
-            command.Parameters.AddWithValue("@authorName", authorName);
-
-            connection.Open();
-
-            int result = Convert.ToInt32(command.ExecuteScalar());
+            int result = BookManager.InsertBook(rfidUID, bookName, authorName);
 
             if (result == 0)
             {
+                DataFetcher.FetchBooks();
                 this.Close();
                 MessageBox.Show($"{bookName} has been successfully registered!");
-                connection.Close();
 
                 var adminWindow = Application.Current.Windows.OfType<AdminWindow>().FirstOrDefault();
 
@@ -74,24 +67,19 @@ namespace LibDefender
             }
         }
 
-        private void RegisterButton_Click(object sender, RoutedEventArgs e)
-        {
-            BigInteger rfidUID = BigInteger.Parse(rfidTxtBox.Text);
-            string bookName = bookNameTxtBox.Text;
-            string authorName = authorTxtBox.Text;
-
-            string query = "INSERT INTO books (bookRfid, bookName, bookAuthor, dateAdded, status)" +
-                "VALUES (@rfidUID, @bookName, @authorName, NOW(), 'Available')";
-
-            RegisterBookQuery(query, rfidUID, bookName, authorName);
-        }
-
         private void RfidTxtBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             if (rfidTxtBox.Text.Length == 10)
             {
                 bookNameTxtBox.Focus();
+                rfidTxtBox.IsEnabled = false;
+                border.Background = Brushes.Gray;
             }
+        }
+
+        private void BookRegisterModal_Loaded(object sender, RoutedEventArgs e)
+        {
+            rfidTxtBox.Focus();
         }
     }
 }

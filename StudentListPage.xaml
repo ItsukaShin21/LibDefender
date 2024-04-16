@@ -99,6 +99,7 @@
                 RowHeaderWidth="0"
                 RowHeight="50"
                 ScrollViewer.CanContentScroll="True"
+                SelectionUnit="Cell"
                 UseLayoutRounding="True"
                 VerticalGridLinesBrush="{x:Null}"
                 VerticalScrollBarVisibility="Visible">
@@ -114,7 +115,6 @@
 
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
-                        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridCell_PreviewMouseLeftButtonDown" />
                         <Setter Property="Foreground" Value="#FFF" />
                         <Setter Property="HorizontalAlignment" Value="Center" />
                         <Setter Property="Template">

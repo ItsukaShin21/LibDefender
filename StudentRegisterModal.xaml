@@ -11,6 +11,7 @@
     d:Height="600"
     d:Width="500"
     Background="#FF1B2431"
+    Loaded="StudentRegisterModal_Loaded"
     ResizeMode="NoResize"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
@@ -48,6 +49,7 @@
                 FontWeight="Medium"
                 Foreground="#FFF" />
             <Border
+                x:Name="border"
                 Margin="0,0,25,0"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"

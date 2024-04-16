@@ -9,6 +9,7 @@
     d:DesignHeight="1004.4"
     d:DesignWidth="1536"
     Background="#FF1B2431"
+    Loaded="StudentLogPage_Loaded"
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
@@ -44,7 +45,8 @@
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
                     SelectionBrush="#FF3C99EB"
-                    TextWrapping="Wrap" TextChanged="RfidTxtBox_TextChanged" />
+                    TextChanged="RfidTxtBox_TextChanged"
+                    TextWrapping="Wrap" />
             </Border>
             <Border
                 Width="451"
@@ -89,7 +91,7 @@
 
         <Grid Grid.Row="1">
             <DataGrid
-                x:Name="DataGrid"
+                x:Name="LogRecordsList"
                 Width="1128.8"
                 Height="650"
                 HorizontalAlignment="Center"
@@ -111,7 +113,7 @@
                 HorizontalGridLinesBrush="White"
                 RowBackground="#2D86B3FF"
                 RowHeaderWidth="0"
-                RowHeight="35"
+                RowHeight="50"
                 SelectionUnit="Cell"
                 VerticalGridLinesBrush="{x:Null}">
                 <DataGrid.ColumnHeaderStyle>
@@ -119,6 +121,7 @@
                         <Setter Property="HorizontalContentAlignment" Value="Center" />
                         <Setter Property="Background" Value="#2D86B3FF" />
                         <Setter Property="Foreground" Value="#FFF" />
+                        <Setter Property="FontWeight" Value="Bold" />
                     </Style>
                 </DataGrid.ColumnHeaderStyle>
                 <DataGrid.CellStyle>
@@ -139,14 +142,14 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding StudentID}"
+                        Binding="{Binding studentID}"
                         CanUserReorder="False"
                         CanUserResize="False"
                         Header="Student ID"
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding StudentName}"
+                        Binding="{Binding studentName}"
                         CanUserReorder="False"
                         CanUserResize="False"
                         CanUserSort="False"
@@ -154,7 +157,7 @@
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding Course}"
+                        Binding="{Binding courseName}"
                         CanUserReorder="False"
                         CanUserResize="False"
                         CanUserSort="False"
@@ -162,7 +165,7 @@
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding TimeIn}"
+                        Binding="{Binding timein, StringFormat='{}{0:h:mm tt}'}"
                         CanUserReorder="False"
                         CanUserResize="False"
                         CanUserSort="False"
@@ -170,7 +173,7 @@
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="*"
-                        Binding="{Binding TimeOut}"
+                        Binding="{Binding timeout, StringFormat='{}{0:h:mm tt}'}"
                         CanUserReorder="False"
                         CanUserResize="False"
                         CanUserSort="False"

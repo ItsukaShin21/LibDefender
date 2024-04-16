@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace LibDefender
@@ -64,7 +65,7 @@ namespace LibDefender
         {
             bool isValid = true;
 
-            if (uidPlaceholder.Visibility == Visibility.Visible || string.IsNullOrWhiteSpace(rfiduidTxtBox.Password))
+            if (uidPlaceholder.Visibility == Visibility.Visible || string.IsNullOrWhiteSpace(rfiduidTxtBox.Text))
             {
                 Rfidtxtbox_ErrorMessage.Visibility = Visibility.Visible;
                 isRfidErrorShown = true;
@@ -113,8 +114,8 @@ namespace LibDefender
                 errorMessageTimer.Interval = TimeSpan.FromSeconds(2);
                 errorMessageTimer.Start();
                 isFieldErrorShown = true;
-                rfiduidTxtBox.Password = "";
-                passwordTxtBox.Password = "";
+                rfiduidTxtBox.Clear();
+                passwordTxtBox.Clear();
                 rfiduidTxtBox.Focus();
             }
         }
@@ -126,7 +127,7 @@ namespace LibDefender
 
         private void RfiduidTxtBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(rfiduidTxtBox.Password))
+            if (string.IsNullOrWhiteSpace(rfiduidTxtBox.Text))
             {
                 uidPlaceholder.Visibility = Visibility.Visible;
             }
@@ -134,7 +135,7 @@ namespace LibDefender
 
         private void RfiduidTxtBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(rfiduidTxtBox.Password))
+            if (string.IsNullOrWhiteSpace(rfiduidTxtBox.Text))
             {
                 uidPlaceholder.Visibility = Visibility.Hidden;
             }
@@ -160,7 +161,7 @@ namespace LibDefender
         {
             if (ValidateInputs())
             {
-                string rfiduid = rfiduidTxtBox.Password;
+                string rfiduid = rfiduidTxtBox.Text;
                 string password = passwordTxtBox.Password;
                 await LoginQuery(rfiduid, password);
                 passwordPlaceholder.Visibility = Visibility.Visible;
@@ -168,9 +169,11 @@ namespace LibDefender
         }
         private void RfiduidTxtBox_TextChanged(object sender, RoutedEventArgs e)
         {
-            if (rfiduidTxtBox.Password.Length == uidLength)
+            if (rfiduidTxtBox.Text.Length == uidLength)
             {
                 passwordTxtBox.Focus();
+                rfiduidTxtBox.IsEnabled = false;
+                border.Background = Brushes.Gray;
             }
         }
         private void Rfidtxtbox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)

@@ -37,6 +37,7 @@ namespace LibDefender
         private void StudentLogsButton_Click(object sender, RoutedEventArgs e)
         {
             PageFrame.Navigate(new StudentLogPage());
+            StudentLogPage.CurrentInstance.RfidTxtBox.Focus();
         }
 
         private void BookListButton_Click(object sender, RoutedEventArgs e)
