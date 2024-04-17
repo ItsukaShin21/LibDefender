@@ -63,10 +63,11 @@
                     VerticalAlignment="Center"
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
+                    Click="BorrowBookModalButton_Click"
                     Content="Borrow"
                     FontFamily="Roboto"
                     FontWeight="Medium"
-                    Foreground="White" Click="BorrowBookModalButton_Click" />
+                    Foreground="White" />
             </Border>
         </Grid>
 
@@ -175,13 +176,13 @@
                                     VerticalAlignment="Center"
                                     Orientation="Horizontal">
                                     <Border
-                                        Width="60"
+                                        Width="70"
                                         Height="30"
                                         Margin="0,0,20,0"
                                         Background="#FF00B69B"
                                         CornerRadius="3,3,3,3">
                                         <Button
-                                            Width="60"
+                                            Width="70"
                                             Height="30"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Media;
+﻿using System.Media;
 using System.Numerics;
 using System.Windows;
 using MySql.Data.MySqlClient;
