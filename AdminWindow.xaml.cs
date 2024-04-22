@@ -59,5 +59,10 @@ namespace LibDefender
             this.Hide();
             LoginWindow.Instance.Show();
         }
+
+        private void CourseListButton_Click(object sender, RoutedEventArgs e)
+        {
+            PageFrame.Navigate(new CourseListPage());
+        }
     }
 }

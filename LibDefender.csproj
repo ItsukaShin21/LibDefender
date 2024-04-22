@@ -23,6 +23,8 @@
   <ItemGroup>
     <PackageReference Include="MahApps.Metro" Version="3.0.0-alpha0492" />
     <PackageReference Include="Syncfusion.SfGrid.WPF" Version="25.1.40" />
+    <PackageReference Include="ToastNotifications" Version="2.5.1" />
+    <PackageReference Include="ToastNotifications.Messages" Version="2.5.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -59,7 +61,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ApplicationDefinition Update="App.xaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </ApplicationDefinition>
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="AdminWindow.xaml.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="AssemblyInfo.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Update="Authentication.cs">
@@ -78,6 +89,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Update="BorrowBookPage.xaml.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="CourseListPage.xaml.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Update="DashboardPage.xaml.cs">
@@ -132,6 +146,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Update="BorrowBookPage.xaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Update="CourseListPage.xaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Update="DashboardPage.xaml">

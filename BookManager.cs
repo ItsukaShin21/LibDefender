@@ -2,6 +2,7 @@
 using System.Numerics;
 using System.Windows;
 using MySql.Data.MySqlClient;
+using ToastNotifications.Messages;
 
 namespace LibDefender
 {
@@ -26,16 +27,26 @@ namespace LibDefender
             {
                 string bookName = reader.GetString("bookName");
                 string status = reader.GetString("status");
+                var currentDateTime = DateTime.Now.ToString("MM/dd/yyyy h:mm tt");
 
                 if (status == "Available")
                 {
                     SoundPlayer player = new(@"C:\\Users\\jeflo\\Documents\\Visual Studio 2022\\Projects\\LibDefender\\Resources\\alarm_audio.wav");
-                    player.Play();
-                    player.PlayLooping();
 
-                    MessageBoxResult result = MessageBox.Show($"The {bookName} book has been stolen", "Alert", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    NotificationManager.Notifier?.ShowError($"The {bookName} book has been stolen...\n" +
+                                                            $"\n" +
+                                                            $"BOOK INFORMATION:\n" +
+                                                            $"\n" +
+                                                            $"Book Name : {bookName}\n" +
+                                                            $"Book Scanned: {currentDateTime}");
 
-                    player.Stop();
+                    Task.Run(() =>
+                    {
+                        for (int i = 0; i < 3; i++)
+                        {
+                            player.PlaySync(); // PlaySync blocks until the sound has finished playing
+                        }
+                    });
                 }
             }
 

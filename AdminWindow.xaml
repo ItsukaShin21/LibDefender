@@ -142,6 +142,22 @@
                 FontSize="20"
                 FontWeight="SemiBold"
                 Foreground="White" />
+            <Button
+                x:Name="CourseListButton"
+                Width="248"
+                Height="50"
+                Margin="29,409,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Left"
+                Background="{x:Null}"
+                BorderBrush="{x:Null}"
+                Click="CourseListButton_Click"
+                Content="Manage Courses"
+                FontFamily="Roboto"
+                FontSize="20"
+                FontWeight="SemiBold"
+                Foreground="White" />
         </Grid>
 
         <Grid Grid.Row="4" Background="#FF273142">
@@ -152,20 +168,6 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Fill="#FFE0E0E0" />
-            <Button
-                Width="248"
-                Height="50"
-                Margin="0,42,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                HorizontalContentAlignment="Left"
-                Background="{x:Null}"
-                BorderBrush="{x:Null}"
-                Content="Settings"
-                FontFamily="Roboto"
-                FontSize="20"
-                FontWeight="SemiBold"
-                Foreground="White" />
             <Button
                 x:Name="LogoutButton"
                 Width="248"
@@ -189,21 +191,15 @@
             Grid.ColumnSpan="4"
             Background="#FF273142">
             <Label
-                Margin="0,9,38,0"
+                x:Name="Username"
+                Height="35"
+                Margin="0,9,50,0"
                 HorizontalAlignment="Right"
-                VerticalAlignment="Top"
+                VerticalAlignment="Center"
                 Content="Victor Lopez"
                 FontFamily="Roboto"
                 FontSize="14"
                 FontWeight="Bold"
-                Foreground="White" />
-            <Label
-                Margin="0,30,85,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                Content="Admin"
-                FontFamily="Roboto"
-                FontSize="12"
                 Foreground="White" />
         </Grid>
 

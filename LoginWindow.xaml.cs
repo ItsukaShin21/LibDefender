@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using System.Windows;
-using System.Windows.Input;
+﻿using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
 
@@ -13,11 +11,6 @@ namespace LibDefender
         private bool isPasswordErrorShown = true;
         private bool isFieldErrorShown = true;
         private const int uidLength = 10;
-
-        [GeneratedRegex("[0-9]+")]
-        private static partial Regex rfidRegexInput();
-        [GeneratedRegex("[A-Za-z0-9!@#]+")]
-        private static partial Regex passwordRegexInput();
 
         private static LoginWindow? newInstance;
         public static LoginWindow Instance
@@ -88,21 +81,12 @@ namespace LibDefender
             return isValid;
         }
 
-        //Function to validate the Regex of the textboxes
-        private static void RegexValidation(TextCompositionEventArgs e, Regex regex)
-        {
-            if (!regex.IsMatch(e.Text))
-            {
-                e.Handled = true;
-            }
-        }
-
         //Function for logging in the user
         private async Task LoginQuery(string rfiduid, string password)
         {
-            int result = await Authentication.AuthenticateUser(rfiduid, password);
+            bool result = await Authentication.AuthenticateUser(rfiduid, password);
 
-            if (result > 0)
+            if (result)
             {
                 MessageBox.Show("Login Successfully");
                 AdminWindow.Instance.Show();
@@ -178,11 +162,11 @@ namespace LibDefender
         }
         private void Rfidtxtbox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            RegexValidation(e, rfidRegexInput());
+            FunctionComponents.ValidateInput(e, FunctionComponents.RfidRegex);
         }
         private void Passwordtxtbox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            RegexValidation(e, passwordRegexInput());
+            FunctionComponents.ValidateInput(e, FunctionComponents.PasswordRegex);
         }
 
         private void UidPlaceholder_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)

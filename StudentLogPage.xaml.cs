@@ -24,5 +24,10 @@ namespace LibDefender
         {
             DataFetcher.FetchLogRecordsData();
         }
+
+        private void PreviewTextInput_RfidTxtBox(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            FunctionComponents.ValidateInput(e, FunctionComponents.RfidRegex);
+        }
     }
 }
